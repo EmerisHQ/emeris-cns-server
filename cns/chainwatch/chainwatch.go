@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/allinbits/emeris-cns-server/models"
+	models "github.com/allinbits/demeris-backend-models/cns"
 
 	"github.com/allinbits/emeris-cns-server/cns/database"
 

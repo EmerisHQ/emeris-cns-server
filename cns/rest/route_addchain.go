@@ -15,7 +15,7 @@ import (
 
 	"github.com/allinbits/emeris-cns-server/utils/k8s"
 
-	"github.com/allinbits/emeris-cns-server/models"
+	models "github.com/allinbits/demeris-backend-models/cns"
 	"github.com/allinbits/emeris-cns-server/utils/k8s/operator"
 	"github.com/gin-gonic/gin"
 )

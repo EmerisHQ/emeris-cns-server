@@ -1,13 +1,13 @@
 package chainwatch
 
 import (
+	models "github.com/allinbits/demeris-backend-models/cns"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
 	"go.uber.org/zap"
 
-	"github.com/allinbits/emeris-cns-server/models"
 	v1 "github.com/allinbits/starport-operator/api/v1"
 )
 
