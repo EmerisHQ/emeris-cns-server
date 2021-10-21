@@ -4,17 +4,17 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/allinbits/demeris-backend/utils/validation"
+	"github.com/allinbits/emeris-cns-server/utils/validation"
 	"github.com/gin-gonic/gin/binding"
 
-	"github.com/allinbits/demeris-backend/cns/chainwatch"
+	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
 
 	kube "sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/go-playground/validator/v10"
 
-	"github.com/allinbits/demeris-backend/cns/database"
-	"github.com/allinbits/demeris-backend/utils/logging"
+	"github.com/allinbits/emeris-cns-server/cns/database"
+	"github.com/allinbits/emeris-cns-server/utils/logging"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

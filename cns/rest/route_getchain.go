@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/allinbits/demeris-backend/models"
+	"github.com/allinbits/emeris-cns-server/models"
 
 	"github.com/gin-gonic/gin"
 )

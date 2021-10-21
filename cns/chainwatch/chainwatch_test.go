@@ -7,7 +7,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/allinbits/demeris-backend/models"
+	"github.com/allinbits/emeris-cns-server/models"
 	v1 "github.com/allinbits/starport-operator/api/v1"
 )
 

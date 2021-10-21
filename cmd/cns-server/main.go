@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/allinbits/demeris-backend/cns/chainwatch"
-	"github.com/allinbits/demeris-backend/cns/database"
-	"github.com/allinbits/demeris-backend/cns/rest"
-	"github.com/allinbits/demeris-backend/utils/k8s"
-	"github.com/allinbits/demeris-backend/utils/logging"
+	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
+	"github.com/allinbits/emeris-cns-server/cns/database"
+	"github.com/allinbits/emeris-cns-server/cns/rest"
+	"github.com/allinbits/emeris-cns-server/utils/k8s"
+	"github.com/allinbits/emeris-cns-server/utils/logging"
 )
 
 var Version = "not specified"

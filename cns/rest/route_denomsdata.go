@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/allinbits/demeris-backend/utils/k8s"
+	"github.com/allinbits/emeris-cns-server/utils/k8s"
 
 	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"

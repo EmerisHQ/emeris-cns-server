@@ -9,14 +9,14 @@ import (
 
 	v1 "github.com/allinbits/starport-operator/api/v1"
 
-	"github.com/allinbits/demeris-backend/cns/chainwatch"
+	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
 
-	"github.com/allinbits/demeris-backend/utils/validation"
+	"github.com/allinbits/emeris-cns-server/utils/validation"
 
-	"github.com/allinbits/demeris-backend/utils/k8s"
+	"github.com/allinbits/emeris-cns-server/utils/k8s"
 
-	"github.com/allinbits/demeris-backend/models"
-	"github.com/allinbits/demeris-backend/utils/k8s/operator"
+	"github.com/allinbits/emeris-cns-server/models"
+	"github.com/allinbits/emeris-cns-server/utils/k8s/operator"
 	"github.com/gin-gonic/gin"
 )
 

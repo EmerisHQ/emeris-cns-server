@@ -4,9 +4,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/allinbits/demeris-backend/utils/validation"
+	"github.com/allinbits/emeris-cns-server/utils/validation"
 
-	"github.com/allinbits/demeris-backend/utils/k8s"
+	"github.com/allinbits/emeris-cns-server/utils/k8s"
 
 	"github.com/gin-gonic/gin"
 )

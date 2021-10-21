@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/allinbits/demeris-backend/utils/configuration"
-	"github.com/allinbits/demeris-backend/utils/validation"
+	"github.com/allinbits/emeris-cns-server/utils/configuration"
+	"github.com/allinbits/emeris-cns-server/utils/validation"
 
 	"github.com/go-playground/validator/v10"
 )
