@@ -24,6 +24,13 @@ type denomsDataResponse struct {
 	StakingDenoms []string `json:"staking_denoms"`
 }
 
+// @Summary Retrieve denominations for a chain
+// @Description Get denominations for a chain identified by name
+// @Router /denoms/{chain} [get]
+// @Param chain path string true "Chain name to return data for"
+// @Produce json
+// @Success 200 {object} denomsDataResponse
+// @Failure 500
 func (r *router) denomsDataHandler(ctx *gin.Context) {
 	chainName := ctx.Param("chain")
 

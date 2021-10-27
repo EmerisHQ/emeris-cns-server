@@ -98,8 +98,8 @@ $RECYCLE.BIN/
 *.log
 
 build/
-docs/swagger.*
-docs/docs.go
+cns/docs/swagger.*
+cns/docs/docs.go
 
 .idea/
 # air config https://github.com/cosmtrek/air

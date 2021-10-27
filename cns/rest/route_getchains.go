@@ -13,6 +13,12 @@ type getChainsResp struct {
 	Chains []models.Chain `json:"chains"`
 }
 
+// @Summary Retrieve all chains
+// @Description Get all chains added to the CNS
+// @Router /chains [get]
+// @Produce json
+// @Success 200 {object} getChainResp
+// @Failure 500
 func (r *router) getChainsHandler(ctx *gin.Context) {
 	data, err := r.s.d.Chains()
 

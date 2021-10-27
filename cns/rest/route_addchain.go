@@ -30,6 +30,15 @@ type addChainRequest struct {
 	RelayerConfiguration *operator.RelayerConfiguration `json:"relayer_configuration"`
 }
 
+// @Summary Add a new chain configuration
+// @Description Add a new chain to the CNS DB
+// @Router /add [post]
+// @Param chain body addChainRequest true "Chain data to add"
+// @Accept json
+// @Produce json
+// @Success 201
+// @Failure 400 "if cannot parse payload, or cannot validate: fees, denoms, relayer config"
+// @Failure 500
 func (r *router) addChainHandler(ctx *gin.Context) {
 	newChain := addChainRequest{}
 

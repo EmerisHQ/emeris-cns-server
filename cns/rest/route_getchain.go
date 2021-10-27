@@ -15,6 +15,14 @@ type getChainResp struct {
 	Chain models.Chain `json:"chain"`
 }
 
+// @Summary Retrieve a chain
+// @Description get chain by name
+// @Router /chain/{chain} [get]
+// @Param chain path string true "Chain name to return"
+// @Produce json
+// @Success 200 {object} getChainResp
+// @Failure 400 "if name is missing"
+// @Failure 500
 func (r *router) getChainHandler(ctx *gin.Context) {
 
 	chain, ok := ctx.Params.Get("chain")

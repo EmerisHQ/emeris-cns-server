@@ -17,6 +17,15 @@ type deleteChainRequest struct {
 	Chain string `json:"chain" binding:"required"`
 }
 
+// @Summary Delete a chain's configuration
+// @Description Delete a chain identified by name
+// @Router /delete [delete]
+// @Param chain body deleteChainRequest true "Chain name to delete"
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 400 "if cannot parse payload"
+// @Failure 500
 func (r *router) deleteChainHandler(ctx *gin.Context) {
 	chain := deleteChainRequest{}
 

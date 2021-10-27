@@ -9,11 +9,11 @@ EXTRAFLAGS :=
 all: $(OBJS)
 
 clean:
-	@rm -rf build docs/swagger.* docs/docs.go
+	@rm -rf build cns/docs/swagger.* cns/docs/docs.go
 
 generate-swagger:
-	go generate ${BASEPKG}/docs
-	@rm docs/docs.go
+	go generate ${BASEPKG}/cns/docs
+	@rm cns/docs/docs.go
 
 $(OBJS):
 	go build -o build/$@ -ldflags='-X main.Version=${BRANCH}-${COMMIT}' ${EXTRAFLAGS} ${BASEPKG}/cmd/$@

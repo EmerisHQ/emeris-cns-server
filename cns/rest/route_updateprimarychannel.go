@@ -14,6 +14,15 @@ type updatePrimaryChannelRequest struct {
 	PrimaryChannel string `json:"primary_channel"`
 }
 
+// @Summary Update the primary channel
+// @Description Update the primary channel for a chain
+// @Router /update_primary_channel [post]
+// @Param chain body updatePrimaryChannelRequest true "Chain data to update"
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 400 "if cannot parse payload"
+// @Failure 500
 func (r *router) updatePrimaryChannelHandler(ctx *gin.Context) {
 	req := updatePrimaryChannelRequest{}
 

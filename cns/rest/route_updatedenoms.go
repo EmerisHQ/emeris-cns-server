@@ -14,6 +14,15 @@ type updateDenomsRequest struct {
 	Denoms models.DenomList `json:"denoms"`
 }
 
+// @Summary Update the denominations for a chain
+// @Description Update the primary channel handler for a chain
+// @Router /denoms [post]
+// @Param chain body updateDenomsRequest true "Chain data to update"
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 400 "if cannot parse payload"
+// @Failure 500
 func (r *router) updateDenomsHandler(ctx *gin.Context) {
 	req := updateDenomsRequest{}
 

@@ -40,5 +40,7 @@ require (
 
 require (
 	github.com/allinbits/demeris-backend-models v0.0.0-20211018093214-0546d958f4d9
+	github.com/swaggo/swag v1.7.4
+	github.com/tendermint/tendermint v0.34.11
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43 // indirect
 )
