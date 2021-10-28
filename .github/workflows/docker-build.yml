@@ -2,6 +2,9 @@ name: Build Docker images
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -60,6 +63,15 @@ jobs:
       - name: Get version
         id: get_version
         uses: battila7/get-version-action@v2
+
+      - name: Go mod tidy
+        run: go mod tidy
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./...
 
       - name: Build and push
         uses: docker/build-push-action@v2

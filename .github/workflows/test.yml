@@ -19,6 +19,9 @@ jobs:
           go env -w GOPRIVATE=github.com/allinbits/*
           git config --global url."https://git:${{ secrets.TENDERBOT_GIT_TOKEN }}@github.com".insteadOf "https://github.com"
 
+      - name: Go mod tidy
+        run: go mod tidy
+
       - name: Build
         run: go build -v ./...
 
