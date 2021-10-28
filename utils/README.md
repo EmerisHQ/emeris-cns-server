@@ -1,6 +1,6 @@
 demeris-backend utils
 -------
- 
+
 A library of shared code between the [demeris-backend](https://github.com/allinbits/demeris-backend) services.
 
 ## Dependencies & Licenses
