@@ -11,7 +11,7 @@ import (
 
 	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
 
-	"github.com/allinbits/emeris-cns-server/utils/validation"
+	"github.com/allinbits/demeris-backend-models/validation"
 
 	"github.com/allinbits/emeris-cns-server/utils/k8s"
 
@@ -62,7 +62,7 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 
 	k := k8s.Querier{
 		Client:    *r.s.k,
-		Namespace: r.s.defaultK8SNamespace,
+		Namespace: r.s.config.KubernetesNamespace,
 	}
 
 	if _, err := k.ChainByName(newChain.ChainName); !errors.Is(err, k8s.ErrNotFound) {
@@ -71,7 +71,7 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 	}
 
 	if newChain.NodeConfig != nil {
-		newChain.NodeConfig.Namespace = r.s.defaultK8SNamespace
+		newChain.NodeConfig.Namespace = r.s.config.KubernetesNamespace
 
 		newChain.NodeConfig.Name = newChain.ChainName
 
@@ -81,7 +81,7 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 			newChain.NodeInfo.ChainID = *newChain.NodeConfig.TestnetConfig.ChainId
 		}
 
-		newChain.NodeConfig.TracelistenerDebug = r.s.debug
+		newChain.NodeConfig.TracelistenerDebug = r.s.config.Debug
 
 		node, err := operator.NewNode(*newChain.NodeConfig)
 		if err != nil {

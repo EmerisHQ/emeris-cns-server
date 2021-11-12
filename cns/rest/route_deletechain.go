@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/allinbits/emeris-cns-server/utils/validation"
+	"github.com/allinbits/demeris-backend-models/validation"
 
 	"github.com/allinbits/emeris-cns-server/utils/k8s"
 
@@ -35,7 +35,7 @@ func (r *router) deleteChainHandler(ctx *gin.Context) {
 		return
 	}
 
-	k := k8s.Querier{Client: *r.s.k, Namespace: r.s.defaultK8SNamespace}
+	k := k8s.Querier{Client: *r.s.k, Namespace: r.s.config.KubernetesNamespace}
 
 	if err := k.DeleteNode(chain.Chain); err != nil {
 		// there isn't always a k8s nodeset for a given chain

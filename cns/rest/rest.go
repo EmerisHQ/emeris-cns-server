@@ -2,9 +2,10 @@ package rest
 
 import (
 	"errors"
+	"github.com/allinbits/emeris-cns-server/cns/config"
 	"net/http"
 
-	"github.com/allinbits/emeris-cns-server/utils/validation"
+	"github.com/allinbits/demeris-backend-models/validation"
 	"github.com/gin-gonic/gin/binding"
 
 	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
@@ -27,16 +28,15 @@ type Server struct {
 	g                   *gin.Engine
 	k                   *kube.Client
 	rc                  *chainwatch.Connection
-	defaultK8SNamespace string
-	debug               bool
+	config				*config.Config
 }
 
 type router struct {
 	s *Server
 }
 
-func NewServer(l *zap.SugaredLogger, d *database.Instance, kube *kube.Client, rc *chainwatch.Connection, defaultK8SNamespace string, debug bool) *Server {
-	if !debug {
+func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc *chainwatch.Connection, config *config.Config) *Server {
+	if !config.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
@@ -46,16 +46,16 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube *kube.Client, rc
 		l:                   l,
 		d:                   d,
 		g:                   g,
-		k:                   kube,
+		k:                   &kube,
 		rc:                  rc,
-		defaultK8SNamespace: defaultK8SNamespace,
-		debug:               debug,
+		config: 			config,
 	}
 
 	r := &router{s: s}
 
 	validation.JSONFields(binding.Validator)
 	validation.DerivationPath(binding.Validator)
+	validation.CosmosRPCURL(binding.Validator)
 
 	g.Use(logging.LogRequest(l.Desugar()))
 	g.Use(ginzap.RecoveryWithZap(l.Desugar(), true))
@@ -65,7 +65,7 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube *kube.Client, rc
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Credentials", "true")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH, OPTIONS, GET, PUT")
+		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH,OPTIONS,GET,PUT")
 
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
