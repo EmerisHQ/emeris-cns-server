@@ -38,7 +38,8 @@ require (
 
 require (
 	github.com/alicebob/miniredis/v2 v2.16.0
-	github.com/allinbits/demeris-backend-models v0.0.0-20211111161516-d003d244b56e
+	github.com/allinbits/demeris-backend-models v0.0.0-20211116145636-4485bb7af3c0
+	github.com/google/go-cmp v0.5.5
 	github.com/swaggo/swag v1.7.4
 	github.com/tendermint/tendermint v0.34.11
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43 // indirect
@@ -92,7 +93,6 @@ require (
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/btree v1.0.0 // indirect
-	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/google/gofuzz v1.1.1-0.20200604201612-c04b05f3adfa // indirect
 	github.com/google/uuid v1.1.5 // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect

@@ -4,44 +4,38 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/allinbits/demeris-backend-models/cns"
-	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"net/http"
-	"regexp"
 	"testing"
 )
 
-// Test returning a Chain with / without PublicEndpointInfo
-func TestGetChain(t *testing.T) {
+// Test returning Chains with & without PublicEndpointInfo
+func TestGetChains(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
 		name        string
-		dataStruct  cns.Chain
-		chainName	string
+		dataStructs  []cns.Chain
 		expectedHttpCode int
 		success bool
 	}{
 		{
-			"Get Chain - Unknown chain",
-			cns.Chain{},	// ignored
-			"foo",
-			404,
-			false,
+			"Get Chains - Empty",
+			[]cns.Chain{},	// ignored
+			200,
+			true,
 		},
 		{
-			"Get Chain - Without PublicEndpoint",
-			chainWithoutPublicEndpoints,
-			chainWithoutPublicEndpoints.ChainName,
+			"Get Chains - One, without PublicEndpoint",
+			[]cns.Chain{chainWithoutPublicEndpoints},
 			200,
 			true,
 		},
 		{
 			"Get Chain - With PublicEndpoints",
-			chainWithPublicEndpoints,
-			chainWithPublicEndpoints.ChainName,
+			[]cns.Chain{chainWithoutPublicEndpoints, chainWithPublicEndpoints},
 			200,
 			true,
 		},
@@ -50,18 +44,16 @@ func TestGetChain(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			regExp := regexp.MustCompile(`/:\w+`)
-			endpoint := regExp.ReplaceAllString(getChainRoute, "/%s")
-			url := "http://%s" + endpoint
-
 			// if we have a populated Chain store it
-			if !cmp.Equal(tt.dataStruct, cns.Chain{}) {
-				err := testingCtx.server.d.AddChain(tt.dataStruct)
-				require.NoError(t, err)
+			if len(tt.dataStructs) > 0 {
+				for _, chain := range tt.dataStructs {
+					err := testingCtx.server.d.AddChain(chain)
+					require.NoError(t, err)
+				}
 			}
 
 			// act
-			resp, err := http.Get(fmt.Sprintf(url, testingCtx.server.config.RESTAddress, tt.chainName))
+			resp, err := http.Get(fmt.Sprintf("http://%s%s", testingCtx.server.config.RESTAddress, getChainsRoute))
 			defer func() { _ = resp.Body.Close() }()
 
 			// assert
@@ -73,12 +65,12 @@ func TestGetChain(t *testing.T) {
 				body, err := ioutil.ReadAll(resp.Body)
 				require.NoError(t, err)
 
-				respStruct := getChainResp{}
+				respStruct := getChainsResp{}
 				err = json.Unmarshal(body, &respStruct)
 				require.NoError(t, err)
 
 				assert.Equal(t, tt.expectedHttpCode, resp.StatusCode)
-				assert.Equal(t, tt.dataStruct, respStruct.Chain)
+				assert.Subset(t, respStruct.Chains, tt.dataStructs)
 			}
 		})
 	}

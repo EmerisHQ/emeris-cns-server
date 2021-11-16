@@ -3,13 +3,17 @@ package rest
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	models "github.com/allinbits/demeris-backend-models/cns"
 
 	"github.com/gin-gonic/gin"
 )
 
-const getChainRoute = "/chain/:chain"
+const (
+	getChainRoute = "/chain/:chain"
+	chainNotFoundErrorMsg = "no rows in result set"
+)
 
 type getChainResp struct {
 	Chain models.Chain `json:"chain"`
@@ -22,7 +26,8 @@ type getChainResp struct {
 // @Produce json
 // @Success 200 {object} getChainResp
 // @Failure 400 "if name is missing"
-// @Failure 500
+// @Failure 404 "if chain not found"
+// @Failure 500 "on error"
 func (r *router) getChainHandler(ctx *gin.Context) {
 
 	chain, ok := ctx.Params.Get("chain")
@@ -34,7 +39,11 @@ func (r *router) getChainHandler(ctx *gin.Context) {
 	data, err := r.s.d.Chain(chain)
 
 	if err != nil {
-		e(ctx, http.StatusInternalServerError, err)
+		if strings.Contains(err.Error(), chainNotFoundErrorMsg) {
+			e(ctx, http.StatusNotFound, err)
+		} else {
+			e(ctx, http.StatusInternalServerError, err)
+		}
 		return
 	}
 
