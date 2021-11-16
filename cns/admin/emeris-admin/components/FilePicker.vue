@@ -1,7 +1,7 @@
 <template>
   <b-field class="file">
     <b-upload v-model="file" :accept="accept" @input="upload">
-      <a class="button is-primary">
+      <a class="button">
         <b-icon icon="upload" custom-size="default"></b-icon>
         <span>{{ buttonLabel }}</span>
       </a>
@@ -21,38 +21,18 @@ export default {
   },
   data() {
     return {
-      file: null,
+      file: "",
       uploadPercent: 0,
     }
   },
   computed: {
     buttonLabel() {
-      return !this.file ? 'Pick a file' : 'Pick another file'
+      return !this.file ? 'Select file' : 'Change file'
     },
   },
   methods: {
     upload(file) {
       this.$emit('input', file)
-      // Use this as an example for handling file uploads
-      // let formData = new FormData()
-      // formData.append('file', file)
-
-      // axios
-      //   .post(window.routeMediaStore, formData, {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data'
-      //     },
-      //     onUploadProgress: this.progressEvent
-      //   })
-      //   .then(r => {
-      //
-      //   })
-      //   .catch(err => {
-      //     this.$buefy.toast.open({
-      //       message: `Error: ${err.message}`,
-      //       type: 'is-danger'
-      //     })
-      //   })
     },
     progressEvent(progressEvent) {
       this.uploadPercent = Math.round(
