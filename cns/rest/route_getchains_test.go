@@ -57,11 +57,12 @@ func TestGetChains(t *testing.T) {
 			defer func() { _ = resp.Body.Close() }()
 
 			// assert
-			if tt.success && err != nil {
-				require.FailNow(t, "Unexpected test failure")
-			} else if err != nil {
-				require.NoError(t, err, "Unexpected error")
+			if !tt.success {
+				require.Error(t, err, "Expecting a failing test case")
+				assert.Equal(t, tt.expectedHttpCode, resp.StatusCode)
 			} else {
+				require.NoError(t, err)
+
 				body, err := ioutil.ReadAll(resp.Body)
 				require.NoError(t, err)
 

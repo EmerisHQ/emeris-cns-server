@@ -2,8 +2,12 @@ package rest
 
 import (
 	"github.com/allinbits/demeris-backend-models/cns"
+	"github.com/allinbits/emeris-cns-server/utils/k8s/operator"
+	v1 "github.com/allinbits/starport-operator/api/v1"
 	"github.com/lib/pq"
 )
+
+var relayerBalance = int64(30000)
 
 var chainWithoutPublicEndpoints = cns.Chain {
 	Enabled: true,
@@ -12,7 +16,7 @@ var chainWithoutPublicEndpoints = cns.Chain {
 	DisplayName: "Chain 1",
 	PrimaryChannel: map[string]string {"key": "value"},
 	Denoms: []cns.Denom {
-		cns.Denom {
+		{
 			Name: "denom1",
 			DisplayName: "Denom 1",
 			Logo: "http://logo.com",
@@ -29,7 +33,7 @@ var chainWithoutPublicEndpoints = cns.Chain {
 			},
 			FetchPrice: true,
 			RelayerDenom: true,
-			MinimumThreshRelayerBalance: nil,
+			MinimumThreshRelayerBalance: &relayerBalance,
 		},
 	},
 	DemerisAddresses: []string {"12345"},
@@ -59,7 +63,7 @@ var chainWithPublicEndpoints = cns.Chain {
 	DisplayName: "Chain 2",
 	PrimaryChannel: map[string]string {"key": "value"},
 	Denoms: []cns.Denom {
-		cns.Denom {
+		{
 			Name: "denom2",
 			DisplayName: "Denom 2",
 			Logo: "http://logo.com",
@@ -76,7 +80,7 @@ var chainWithPublicEndpoints = cns.Chain {
 			},
 			FetchPrice: true,
 			RelayerDenom: true,
-			MinimumThreshRelayerBalance: nil,
+			MinimumThreshRelayerBalance: &relayerBalance,
 		},
 	},
 	DemerisAddresses: []string {"12345"},
@@ -101,4 +105,54 @@ var chainWithPublicEndpoints = cns.Chain {
 		TendermintRPC: "https://www.host.com:1234",
 		CosmosAPI:     "https://host.foo.bar:2345",
 	},
+}
+
+var nodeRPC = v1.NodeRPC {
+	Address: "host.com",
+}
+
+var joinConfig = v1.JoinConfig {
+	Genesis: v1.GenesisDownload {
+		FromNodeRPC: &nodeRPC,
+	},
+	Seeds: []v1.Peer {
+		{
+			Id: "test",
+			Address: "127.0.0.1",
+		},
+	},
+	PersistentPeers: []v1.Peer {
+		{
+			Id: "test",
+			Address: "127.0.0.1",
+		},
+	},
+}
+
+var amount = "1234"
+var testnetName = "testnet"
+
+var validatorInitConfig = v1.ValidatorInitConfig {
+	ChainId: &testnetName,
+	StakeAmount: &amount,
+	Assets: []string{"asset1", "asset2"},
+}
+
+var nodeConfig = operator.NodeConfiguration {
+	Name:                "test",
+	CLIName:             "gaiad",
+	JoinConfig:          &joinConfig,
+	TestnetConfig:       &validatorInitConfig,
+	DockerImage:         "docker/image",
+	DockerImageVersion:  "v1.0.0",
+	TracelistenerImage:  "tracelistener/image",
+	DisableMinFeeConfig: true,
+	TracelistenerDebug:  false,
+}
+
+var relayerConfig = operator.RelayerConfiguration {
+	MaxMsgNum: 1234,
+	ClockDrift: "10s",
+	MaxGas: 345,
+	TrustingPeriod: "10min",
 }
