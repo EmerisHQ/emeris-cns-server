@@ -129,7 +129,7 @@ func (c *Connection) HasChain(name string) (bool, error) {
 }
 
 func (c *Connection) Chains() ([]Chain, error) {
-	var ret []Chain
+	ret := make([]Chain, 0)
 
 	result, err := c.conn.SMembers(context.Background(), setPrefix).Result()
 	if err != nil {

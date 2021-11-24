@@ -51,6 +51,7 @@ func (r *router) deleteChainHandler(ctx *gin.Context) {
 		r.s.l.Error("cannot delete chain", err)
 		return
 	}
+
 }
 func (r *router) deleteChain() (string, gin.HandlerFunc) {
 	return deleteChainRoute, r.deleteChainHandler

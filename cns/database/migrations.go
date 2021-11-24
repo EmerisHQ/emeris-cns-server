@@ -89,10 +89,6 @@ const getAllChains = `
 SELECT * FROM cns.chains
 `
 
-const getChain = `
-SELECT * FROM cns.chains WHERE chain_name=:chain limit 1;
-`
-
 const channelsBetweenChains = `
 SELECT
 	c1.chain_name AS chain_a_chain_name,
