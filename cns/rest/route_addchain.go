@@ -152,8 +152,6 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 		r.s.l.Error("cannot add chain", err)
 		return
 	}
-
-	return
 }
 func (r *router) addChain() (string, gin.HandlerFunc) {
 	return addChainRoute, r.addChainHandler

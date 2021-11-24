@@ -38,8 +38,6 @@ func (r *router) updateDenomsHandler(ctx *gin.Context) {
 		r.s.l.Error("cannot update denoms", err)
 		return
 	}
-
-	return
 }
 func (r *router) updateDenoms() (string, gin.HandlerFunc) {
 	return updateDenomsRoute, r.updateDenomsHandler

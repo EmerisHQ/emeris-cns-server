@@ -1,8 +1,9 @@
 package rest
 
 import (
-	models "github.com/allinbits/demeris-backend-models/cns"
 	"net/http"
+
+	models "github.com/allinbits/demeris-backend-models/cns"
 
 	"github.com/gin-gonic/gin"
 )
