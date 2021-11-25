@@ -1,9 +1,10 @@
 package rest
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"net/http"
-	"strings"
 
 	models "github.com/allinbits/demeris-backend-models/cns"
 
@@ -11,11 +12,10 @@ import (
 )
 
 const (
-	getChainRoute = "/chain/:chain"
-	chainNotFoundErrorMsg = "no rows in result set"
+	GetChainRoute = "/chain/:chain"
 )
 
-type getChainResp struct {
+type GetChainResp struct {
 	Chain models.Chain `json:"chain"`
 }
 
@@ -36,10 +36,10 @@ func (r *router) getChainHandler(ctx *gin.Context) {
 		e(ctx, http.StatusBadRequest, fmt.Errorf("chain not supplied"))
 	}
 
-	data, err := r.s.d.Chain(chain)
+	data, err := r.s.DB.Chain(chain)
 
 	if err != nil {
-		if strings.Contains(err.Error(), chainNotFoundErrorMsg) {
+		if errors.Is(err, sql.ErrNoRows) {
 			e(ctx, http.StatusNotFound, err)
 		} else {
 			e(ctx, http.StatusInternalServerError, err)
@@ -47,10 +47,10 @@ func (r *router) getChainHandler(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, getChainResp{
+	ctx.JSON(http.StatusOK, GetChainResp{
 		Chain: data,
 	})
 }
 func (r *router) getChain() (string, gin.HandlerFunc) {
-	return getChainRoute, r.getChainHandler
+	return GetChainRoute, r.getChainHandler
 }

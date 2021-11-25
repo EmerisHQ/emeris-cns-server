@@ -1,29 +1,31 @@
-package rest
+package rest_test
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/allinbits/demeris-backend-models/cns"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"io/ioutil"
 	"net/http"
 	"testing"
+
+	"github.com/allinbits/emeris-cns-server/cns/rest"
+
+	"github.com/allinbits/demeris-backend-models/cns"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // Test returning Chains with & without PublicEndpointInfo
 func TestGetChains(t *testing.T) {
-	t.Parallel()
 
 	tests := []struct {
-		name        string
-		dataStructs  []cns.Chain
+		name             string
+		dataStructs      []cns.Chain
 		expectedHttpCode int
-		success bool
+		success          bool
 	}{
 		{
 			"Get Chains - Empty",
-			[]cns.Chain{},	// ignored
+			[]cns.Chain{}, // ignored
 			200,
 			true,
 		},
@@ -43,17 +45,18 @@ func TestGetChains(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 
 			// if we have a populated Chain store it
 			if len(tt.dataStructs) > 0 {
 				for _, chain := range tt.dataStructs {
-					err := testingCtx.server.d.AddChain(chain)
+					err := testingCtx.server.DB.AddChain(chain)
 					require.NoError(t, err)
 				}
 			}
 
 			// act
-			resp, err := http.Get(fmt.Sprintf("http://%s%s", testingCtx.server.config.RESTAddress, getChainsRoute))
+			resp, err := http.Get(fmt.Sprintf("http://%s%s", testingCtx.server.Config.RESTAddress, rest.GetChainsRoute))
 			defer func() { _ = resp.Body.Close() }()
 
 			// assert
@@ -66,7 +69,7 @@ func TestGetChains(t *testing.T) {
 				body, err := ioutil.ReadAll(resp.Body)
 				require.NoError(t, err)
 
-				respStruct := getChainsResp{}
+				respStruct := rest.GetChainsResp{}
 				err = json.Unmarshal(body, &respStruct)
 				require.NoError(t, err)
 
@@ -74,5 +77,6 @@ func TestGetChains(t *testing.T) {
 				assert.Subset(t, respStruct.Chains, tt.dataStructs)
 			}
 		})
+		truncateDB(t)
 	}
 }

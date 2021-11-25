@@ -1,7 +1,16 @@
-package rest
+package rest_test
 
 import (
 	"fmt"
+	"net"
+	"net/http/httptest"
+	"os"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/allinbits/emeris-cns-server/cns/rest"
+
 	"github.com/alicebob/miniredis/v2"
 	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
 	"github.com/allinbits/emeris-cns-server/cns/config"
@@ -11,24 +20,19 @@ import (
 	"github.com/cockroachdb/cockroach-go/v2/testserver"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net"
-	"net/http/httptest"
-	"os"
-	"testing"
 )
 
 // --- Global variables for child tests ---
-var testingCtx struct{
-	server *Server
+var testingCtx struct {
+	server *rest.Server
 }
 
-// TestMain will automatically run before all test and hook back in // after all test is done
 func TestMain(m *testing.M) {
 
 	// global setup
-	router, _, _, tearDown := setup(m)
+	server, _, _, tearDown := setup()
 
-	testingCtx.server = router.s
+	testingCtx.server = server
 
 	// Run test suites
 	exitVal := m.Run()
@@ -39,7 +43,7 @@ func TestMain(m *testing.M) {
 	os.Exit(exitVal)
 }
 
-func setup(m *testing.M) (router, *gin.Context, *httptest.ResponseRecorder, func()) {
+func setup() (*rest.Server, *gin.Context, *httptest.ResponseRecorder, func()) {
 
 	// --- logger & Gin test context ---
 	httpRecorder := httptest.NewRecorder()
@@ -68,7 +72,7 @@ func setup(m *testing.M) (router, *gin.Context, *httptest.ResponseRecorder, func
 	redisAddr := miniRedis.Addr()
 
 	// --- K8s mock ---
-	kube := &mocks.Client{}
+	kube := mocks.Client{}
 
 	// --- Chainwatch process ---
 	redisConnection, err := chainwatch.NewConnection(redisAddr)
@@ -76,7 +80,7 @@ func setup(m *testing.M) (router, *gin.Context, *httptest.ResponseRecorder, func
 
 	chainwatchInstance := chainwatch.New(
 		logger,
-		kube,
+		&kube,
 		k8sNsInTest,
 		redisConnection,
 		dbInstance,
@@ -98,10 +102,10 @@ func setup(m *testing.M) (router, *gin.Context, *httptest.ResponseRecorder, func
 		RelayerDebug:          true,
 		RESTAddress:           "127.0.0.1:" + port,
 	}
-	server := NewServer(
+	server := rest.NewServer(
 		logger,
 		dbInstance,
-		kube,
+		&kube,
 		redisConnection,
 		conf,
 	)
@@ -115,7 +119,14 @@ func setup(m *testing.M) (router, *gin.Context, *httptest.ResponseRecorder, func
 	}()
 	<-ch // Wait for the goroutine to start. Still hack!!
 
-	return router{s: server}, ginCtx, httpRecorder, func() { cdbTestServer.Stop(); miniRedis.Close() }
+	return server, ginCtx, httpRecorder, func() { cdbTestServer.Stop(); miniRedis.Close() }
+}
+
+// Empties the DB of data
+// Only use in tests executed sequentially
+func truncateDB(t *testing.T) {
+	_, err := testingCtx.server.DB.Instance.DB.Exec("TRUNCATE cns.chains")
+	assert.NoError(t, err)
 }
 
 func getFreePort() (port string, err error) {

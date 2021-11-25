@@ -2,8 +2,9 @@ package rest
 
 import (
 	"errors"
-	"github.com/allinbits/emeris-cns-server/cns/config"
 	"net/http"
+
+	"github.com/allinbits/emeris-cns-server/cns/config"
 
 	"github.com/allinbits/demeris-backend-models/validation"
 	"github.com/gin-gonic/gin/binding"
@@ -22,13 +23,13 @@ import (
 )
 
 type Server struct {
-	l                   *zap.SugaredLogger
-	gl                  *zap.Logger
-	d                   *database.Instance
-	g                   *gin.Engine
-	k                   *kube.Client
-	rc                  *chainwatch.Connection
-	config				*config.Config
+	l          *zap.SugaredLogger
+	gl         *zap.Logger
+	DB         *database.Instance
+	g          *gin.Engine
+	KubeClient *kube.Client
+	rc         *chainwatch.Connection
+	Config     *config.Config
 }
 
 type router struct {
@@ -43,12 +44,12 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 	g := gin.New()
 
 	s := &Server{
-		l:                   l,
-		d:                   d,
-		g:                   g,
-		k:                   &kube,
-		rc:                  rc,
-		config: 			config,
+		l:          l,
+		DB:         d,
+		g:          g,
+		KubeClient: &kube,
+		rc:         rc,
+		Config:     config,
 	}
 
 	r := &router{s: s}

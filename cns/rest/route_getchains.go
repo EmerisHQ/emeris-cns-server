@@ -1,15 +1,16 @@
 package rest
 
 import (
-	models "github.com/allinbits/demeris-backend-models/cns"
 	"net/http"
+
+	models "github.com/allinbits/demeris-backend-models/cns"
 
 	"github.com/gin-gonic/gin"
 )
 
-const getChainsRoute = "/chains"
+const GetChainsRoute = "/chains"
 
-type getChainsResp struct {
+type GetChainsResp struct {
 	Chains []models.Chain `json:"chains"`
 }
 
@@ -20,17 +21,17 @@ type getChainsResp struct {
 // @Success 200 {object} getChainResp
 // @Failure 500
 func (r *router) getChainsHandler(ctx *gin.Context) {
-	data, err := r.s.d.Chains()
+	data, err := r.s.DB.Chains()
 
 	if err != nil {
 		e(ctx, http.StatusInternalServerError, err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, getChainsResp{
+	ctx.JSON(http.StatusOK, GetChainsResp{
 		Chains: data,
 	})
 }
 func (r *router) getChains() (string, gin.HandlerFunc) {
-	return getChainsRoute, r.getChainsHandler
+	return GetChainsRoute, r.getChainsHandler
 }

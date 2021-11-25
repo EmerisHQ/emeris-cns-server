@@ -1,33 +1,34 @@
-package rest
+package rest_test
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"strings"
+	"testing"
+
+	"github.com/allinbits/emeris-cns-server/cns/rest"
+
 	"github.com/allinbits/demeris-backend-models/cns"
 	"github.com/allinbits/emeris-cns-server/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"net/http"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"strings"
-	"testing"
 )
 
 // Test adding a Chain with & without PublicEndpointInfo
 // Mocks the K8s client
 func TestAddChain(t *testing.T) {
-	t.Parallel()
 
-	// prepare the mock K8s client
 	setupMockK8sClient()
 
 	tests := []struct {
-		name        string
-		dataStruct  cns.Chain
+		name             string
+		dataStruct       cns.Chain
 		expectedHttpCode int
-		success bool
+		success          bool
 	}{
 		{
 			"Add Chain - Invalid",
@@ -51,18 +52,19 @@ func TestAddChain(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 
 			// arrange
-			addReq := addChainRequest {
-				tt.dataStruct,
-				true,
-				&nodeConfig,
-				&relayerConfig,
+			addReq := rest.AddChainRequest{
+				Chain:                tt.dataStruct,
+				SkipChannelCreation:  true,
+				NodeConfig:           &nodeConfig,
+				RelayerConfiguration: &relayerConfig,
 			}
 			payload, _ := json.Marshal(addReq)
 
 			// act
-			resp, err := http.Post(fmt.Sprintf("http://%s%s", testingCtx.server.config.RESTAddress, addChainRoute), "application/json", strings.NewReader(string(payload)))
+			resp, err := http.Post(fmt.Sprintf("http://%s%s", testingCtx.server.Config.RESTAddress, rest.AddChainRoute), "application/json", strings.NewReader(string(payload)))
 
 			// assert
 			if !tt.success {
@@ -77,25 +79,26 @@ func TestAddChain(t *testing.T) {
 				//   How to verify the chain from the DB?
 			}
 		})
+		truncateDB(t)
 	}
 }
 
 // Prepare the mock for the calls to expect
 func setupMockK8sClient() {
 
-	kubeClient := *testingCtx.server.k
+	kubeClient := *testingCtx.server.KubeClient
 
 	// Mocked 'List' does not "find" matching nodes (i.e. leave NodeSetList empty)
 	kubeClient.(*mocks.Client).On("List",
-		mock.Anything, 	// *context.emptyCtx
-		mock.Anything, 	// *v1.NodeSetList
-		mock.Anything,	// client.MatchingFields
-		mock.Anything,	// client.InNamespace
-		).Return(func(context.Context, client.ObjectList, ...client.ListOption) error { return nil })
+		mock.Anything, // *context.emptyCtx
+		mock.Anything, // *v1.NodeSetList
+		mock.Anything, // client.MatchingFields
+		mock.Anything, // client.InNamespace
+	).Return(func(context.Context, client.ObjectList, ...client.ListOption) error { return nil })
 
 	// Mocked 'Create' does nothing
 	kubeClient.(*mocks.Client).On("Create",
-		mock.Anything, 	// context.Context
-		mock.Anything, 	// client.ObjectList
+		mock.Anything, // context.Context
+		mock.Anything, // client.ObjectList
 	).Return(func(context.Context, client.Object, ...client.CreateOption) error { return nil })
 }

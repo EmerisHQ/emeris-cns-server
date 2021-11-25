@@ -20,9 +20,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const addChainRoute = "/add"
+const AddChainRoute = "/add"
 
-type addChainRequest struct {
+type AddChainRequest struct {
 	models.Chain
 
 	SkipChannelCreation  bool                           `json:"skip_channel_creation"`
@@ -40,7 +40,7 @@ type addChainRequest struct {
 // @Failure 400 "if cannot parse payload, or cannot validate: fees, denoms, relayer config"
 // @Failure 500
 func (r *router) addChainHandler(ctx *gin.Context) {
-	newChain := addChainRequest{}
+	newChain := AddChainRequest{}
 
 	if err := ctx.ShouldBindJSON(&newChain); err != nil {
 		e(ctx, http.StatusBadRequest, validation.MissingFieldsErr(err, false))
@@ -61,8 +61,8 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 	}
 
 	k := k8s.Querier{
-		Client:    *r.s.k,
-		Namespace: r.s.config.KubernetesNamespace,
+		Client:    *r.s.KubeClient,
+		Namespace: r.s.Config.KubernetesNamespace,
 	}
 
 	if _, err := k.ChainByName(newChain.ChainName); !errors.Is(err, k8s.ErrNotFound) {
@@ -71,7 +71,7 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 	}
 
 	if newChain.NodeConfig != nil {
-		newChain.NodeConfig.Namespace = r.s.config.KubernetesNamespace
+		newChain.NodeConfig.Namespace = r.s.Config.KubernetesNamespace
 
 		newChain.NodeConfig.Name = newChain.ChainName
 
@@ -81,7 +81,7 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 			newChain.NodeInfo.ChainID = *newChain.NodeConfig.TestnetConfig.ChainId
 		}
 
-		newChain.NodeConfig.TracelistenerDebug = r.s.config.Debug
+		newChain.NodeConfig.TracelistenerDebug = r.s.Config.Debug
 
 		node, err := operator.NewNode(*newChain.NodeConfig)
 		if err != nil {
@@ -147,7 +147,7 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 		}
 	}
 
-	if err := r.s.d.AddChain(newChain.Chain); err != nil {
+	if err := r.s.DB.AddChain(newChain.Chain); err != nil {
 		e(ctx, http.StatusInternalServerError, err)
 		r.s.l.Error("cannot add chain", err)
 		return
@@ -159,7 +159,7 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 	return
 }
 func (r *router) addChain() (string, gin.HandlerFunc) {
-	return addChainRoute, r.addChainHandler
+	return AddChainRoute, r.addChainHandler
 }
 
 func validateFees(c models.Chain) error {
