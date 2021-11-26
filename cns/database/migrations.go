@@ -168,7 +168,7 @@ const addColumnBlockExplorer = `
 ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS block_explorer string;
 `
 const addColumnPublicNodeEndpoints = `
-ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS public_node_endpoints jsonb;
+ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS public_node_endpoints jsonb DEFAULT '{}';
 `
 
 var migrationList = []string{
