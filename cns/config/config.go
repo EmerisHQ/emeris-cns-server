@@ -1,10 +1,10 @@
-package main
+package config
 
 import (
 	"fmt"
 
+	"github.com/allinbits/demeris-backend-models/validation"
 	"github.com/allinbits/emeris-cns-server/utils/configuration"
-	"github.com/allinbits/emeris-cns-server/utils/validation"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -30,7 +30,7 @@ func (c Config) Validate() error {
 	)
 }
 
-func readConfig() (*Config, error) {
+func ReadConfig() (*Config, error) {
 	var c Config
 
 	return &c, configuration.ReadConfig(&c, "demeris-cns", map[string]string{
