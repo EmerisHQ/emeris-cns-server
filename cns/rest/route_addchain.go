@@ -33,7 +33,7 @@ type AddChainRequest struct {
 // @Summary Add a new chain configuration
 // @Description Add a new chain to the CNS DB
 // @Router /add [post]
-// @Param chain body addChainRequest true "Chain data to add"
+// @Param chain body AddChainRequest true "Chain data to add"
 // @Accept json
 // @Produce json
 // @Success 201

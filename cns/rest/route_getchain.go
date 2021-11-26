@@ -24,7 +24,7 @@ type GetChainResp struct {
 // @Router /chain/{chain} [get]
 // @Param chain path string true "Chain name to return"
 // @Produce json
-// @Success 200 {object} getChainResp
+// @Success 200 {object} GetChainResp
 // @Failure 400 "if name is missing"
 // @Failure 404 "if chain not found"
 // @Failure 500 "on error"

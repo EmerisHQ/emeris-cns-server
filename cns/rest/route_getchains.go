@@ -18,7 +18,7 @@ type GetChainsResp struct {
 // @Description Get all chains added to the CNS
 // @Router /chains [get]
 // @Produce json
-// @Success 200 {object} getChainResp
+// @Success 200 {object} GetChainResp
 // @Failure 500
 func (r *router) getChainsHandler(ctx *gin.Context) {
 	data, err := r.s.DB.Chains()
