@@ -12,7 +12,6 @@ import (
 
 	"github.com/allinbits/demeris-backend-models/cns"
 	"github.com/allinbits/emeris-cns-server/mocks"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -72,7 +71,7 @@ func TestAddChain(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 
-				assert.Equal(t, tt.expectedHttpCode, resp.StatusCode)
+				require.Equal(t, tt.expectedHttpCode, resp.StatusCode)
 
 				require.NoError(t, err)
 				// TODO: ID is auto-calculated, testnet chain-ids are auto-populated.

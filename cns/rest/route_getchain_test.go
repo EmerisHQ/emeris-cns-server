@@ -12,7 +12,6 @@ import (
 
 	"github.com/allinbits/demeris-backend-models/cns"
 	"github.com/google/go-cmp/cmp"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -70,7 +69,7 @@ func TestGetChain(t *testing.T) {
 			// assert
 			if !tt.success {
 				require.Error(t, err, "Expecting a failed test case")
-				assert.Equal(t, tt.expectedHttpCode, resp.StatusCode)
+				require.Equal(t, tt.expectedHttpCode, resp.StatusCode)
 			} else {
 				require.NoError(t, err)
 
@@ -81,8 +80,8 @@ func TestGetChain(t *testing.T) {
 				err = json.Unmarshal(body, &respStruct)
 				require.NoError(t, err)
 
-				assert.Equal(t, tt.expectedHttpCode, resp.StatusCode)
-				assert.Equal(t, tt.dataStruct, respStruct.Chain)
+				require.Equal(t, tt.expectedHttpCode, resp.StatusCode)
+				require.Equal(t, tt.dataStruct, respStruct.Chain)
 			}
 		})
 		truncateDB(t)

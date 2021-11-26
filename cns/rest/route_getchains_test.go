@@ -10,7 +10,6 @@ import (
 	"github.com/allinbits/emeris-cns-server/cns/rest"
 
 	"github.com/allinbits/demeris-backend-models/cns"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -62,7 +61,7 @@ func TestGetChains(t *testing.T) {
 			// assert
 			if !tt.success {
 				require.Error(t, err, "Expecting a failing test case")
-				assert.Equal(t, tt.expectedHttpCode, resp.StatusCode)
+				require.Equal(t, tt.expectedHttpCode, resp.StatusCode)
 			} else {
 				require.NoError(t, err)
 
@@ -73,8 +72,8 @@ func TestGetChains(t *testing.T) {
 				err = json.Unmarshal(body, &respStruct)
 				require.NoError(t, err)
 
-				assert.Equal(t, tt.expectedHttpCode, resp.StatusCode)
-				assert.Subset(t, respStruct.Chains, tt.dataStructs)
+				require.Equal(t, tt.expectedHttpCode, resp.StatusCode)
+				require.Subset(t, respStruct.Chains, tt.dataStructs)
 			}
 		})
 		truncateDB(t)
