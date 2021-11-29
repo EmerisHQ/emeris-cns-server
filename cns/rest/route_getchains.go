@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const getChainsRoute = "/chains"
+const GetChainsRoute = "/chains"
 
-type getChainsResp struct {
+type GetChainsResp struct {
 	Chains []models.Chain `json:"chains"`
 }
 
@@ -18,20 +18,20 @@ type getChainsResp struct {
 // @Description Get all chains added to the CNS
 // @Router /chains [get]
 // @Produce json
-// @Success 200 {object} getChainResp
+// @Success 200 {object} GetChainResp
 // @Failure 500
 func (r *router) getChainsHandler(ctx *gin.Context) {
-	data, err := r.s.d.Chains()
+	data, err := r.s.DB.Chains()
 
 	if err != nil {
 		e(ctx, http.StatusInternalServerError, err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, getChainsResp{
+	ctx.JSON(http.StatusOK, GetChainsResp{
 		Chains: data,
 	})
 }
 func (r *router) getChains() (string, gin.HandlerFunc) {
-	return getChainsRoute, r.getChainsHandler
+	return GetChainsRoute, r.getChainsHandler
 }

@@ -46,7 +46,8 @@ INSERT INTO cns.chains
 		node_info,
 		derivation_path,
 		supported_wallets,
-		block_explorer
+		block_explorer,
+		public_node_endpoints
 	)
 VALUES
 	(
@@ -62,7 +63,8 @@ VALUES
 		:node_info,
 		:derivation_path,
 		:supported_wallets,
-		:block_explorer
+		:block_explorer,
+		:public_node_endpoints
 	)
 ON CONFLICT
 	(chain_name)
@@ -79,7 +81,8 @@ DO UPDATE SET
 		node_info=EXCLUDED.node_info,
 		derivation_path=EXCLUDED.derivation_path,
 		supported_wallets=EXCLUDED.supported_wallets,
-		block_explorer=EXCLUDED.block_explorer;
+		block_explorer=EXCLUDED.block_explorer,
+		public_node_endpoints=EXCLUDED.public_node_endpoints;
 `
 
 const getAllChains = `
@@ -160,12 +163,16 @@ ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS supported_wallets text[] NOT NUL
 const addColumnBlockExplorer = `
 ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS block_explorer string;
 `
+const addColumnPublicNodeEndpoints = `
+ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS public_node_endpoints jsonb DEFAULT '{}';
+`
 
 var migrationList = []string{
 	createDatabase,
 	createTableChains,
 	addColumnSupportedWallets,
 	addColumnBlockExplorer,
+	addColumnPublicNodeEndpoints,
 }
 
 func (i *Instance) runMigrations() {

@@ -11,7 +11,7 @@ import (
 )
 
 type Instance struct {
-	d          *dbutils.Instance
+	Instance   *dbutils.Instance
 	connString string
 }
 
@@ -22,7 +22,7 @@ func New(connString string) (*Instance, error) {
 	}
 
 	ii := &Instance{
-		d:          i,
+		Instance:   i,
 		connString: connString,
 	}
 
@@ -31,7 +31,7 @@ func New(connString string) (*Instance, error) {
 }
 
 func (i *Instance) AddChain(chain models.Chain) error {
-	n, err := i.d.DB.PrepareNamed(insertChain)
+	n, err := i.Instance.DB.PrepareNamed(insertChain)
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func (i *Instance) AddChain(chain models.Chain) error {
 }
 
 func (i *Instance) DeleteChain(chain string) error {
-	n, err := i.d.DB.PrepareNamed(deleteChain)
+	n, err := i.Instance.DB.PrepareNamed(deleteChain)
 	if err != nil {
 		return err
 	}
@@ -87,7 +87,7 @@ func (i *Instance) DeleteChain(chain string) error {
 func (i *Instance) Chain(chain string) (models.Chain, error) {
 	var c models.Chain
 
-	err := i.d.DB.Get(&c, fmt.Sprintf("SELECT * FROM cns.chains WHERE chain_name='%s' limit 1;", chain))
+	err := i.Instance.DB.Get(&c, fmt.Sprintf("SELECT * FROM cns.chains WHERE chain_name='%s' limit 1;", chain))
 
 	return c, err
 }
@@ -95,12 +95,12 @@ func (i *Instance) Chain(chain string) (models.Chain, error) {
 func (i *Instance) Chains() ([]models.Chain, error) {
 	var c []models.Chain
 
-	return c, i.d.Exec(getAllChains, nil, &c)
+	return c, i.Instance.Exec(getAllChains, nil, &c)
 }
 
 func (i *Instance) UpdatePrimaryChannel(sourceChain, destChain, channel string) error {
 
-	res, err := i.d.DB.Exec(fmt.Sprintf(`
+	res, err := i.Instance.DB.Exec(fmt.Sprintf(`
 	UPDATE cns.chains
 	SET primary_channel = primary_channel || jsonb_build_object('%s' , '%s')
 	WHERE chain_name='%s'
@@ -123,7 +123,7 @@ func (i *Instance) GetDenoms(chain string) (models.DenomList, error) {
 
 	var l models.DenomList
 
-	return l, i.d.Exec("select json_array_elements(denoms) from cns.chains where chain_name=:chain;", map[string]interface{}{
+	return l, i.Instance.Exec("select json_array_elements(denoms) from cns.chains where chain_name=:chain;", map[string]interface{}{
 		"chain": chain,
 	}, &l)
 }
@@ -136,7 +136,7 @@ func (i *Instance) UpdateDenoms(chain string, denoms models.DenomList) error {
 		return err
 	}
 
-	res, err := i.d.DB.Exec(fmt.Sprintf(`
+	res, err := i.Instance.DB.Exec(fmt.Sprintf(`
 	UPDATE cns.chains
 	SET denoms = '%s'::jsonb
 	WHERE chain_name='%s'
@@ -172,7 +172,7 @@ func (i *Instance) ChannelsBetweenChains(source, destination, chainID string) (m
 
 	var c []channelsBetweenChain
 
-	n, err := i.d.DB.PrepareNamed(channelsBetweenChains)
+	n, err := i.Instance.DB.PrepareNamed(channelsBetweenChains)
 	if err != nil {
 		return map[string]string{}, err
 	}
@@ -202,5 +202,5 @@ func (i *Instance) ChannelsBetweenChains(source, destination, chainID string) (m
 
 func (i *Instance) ChainAmount() (int, error) {
 	var ret int
-	return ret, i.d.DB.Get(&ret, "select count(id) from cns.chains")
+	return ret, i.Instance.DB.Get(&ret, "select count(id) from cns.chains")
 }

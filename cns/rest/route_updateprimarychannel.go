@@ -33,7 +33,7 @@ func (r *router) updatePrimaryChannelHandler(ctx *gin.Context) {
 
 	}
 
-	if err := r.s.d.UpdatePrimaryChannel(req.Chain, req.DestChain, req.PrimaryChannel); err != nil {
+	if err := r.s.DB.UpdatePrimaryChannel(req.Chain, req.DestChain, req.PrimaryChannel); err != nil {
 		e(ctx, http.StatusInternalServerError, err)
 		r.s.l.Error("cannot update primary channel", err)
 		return

@@ -35,7 +35,7 @@ func (r *router) denomsDataHandler(ctx *gin.Context) {
 	chainName := ctx.Param("chain")
 
 	q := k8s.Querier{
-		Client: *r.s.k,
+		Client: *r.s.KubeClient,
 	}
 
 	ready, err := q.ChainRunning(chainName)
