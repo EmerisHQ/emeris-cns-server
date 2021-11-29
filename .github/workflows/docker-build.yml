@@ -2,16 +2,10 @@ name: Build Docker images
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - Dockerfile
-      - cmd/**
-      - cns/**
-      - utils/**
-      - go.mod
-      - go.sum
+  workflow_run:
+    workflows: [Execute tests]
+    branches: [main]
+    types: [completed]
 
 jobs:
   admin-ui:
