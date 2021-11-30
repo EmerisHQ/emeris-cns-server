@@ -170,6 +170,9 @@ ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS block_explorer string;
 const addColumnPublicNodeEndpoints = `
 ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS public_node_endpoints jsonb DEFAULT '{}';
 `
+const addColumnCosmosSDKVersion = `
+ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS cosmos_sdk_version string DEFAULT 'v0.42.10';
+`
 
 var migrationList = []string{
 	createDatabase,
@@ -177,6 +180,7 @@ var migrationList = []string{
 	addColumnSupportedWallets,
 	addColumnBlockExplorer,
 	addColumnPublicNodeEndpoints,
+	addColumnCosmosSDKVersion,
 }
 
 func (i *Instance) runMigrations() {
