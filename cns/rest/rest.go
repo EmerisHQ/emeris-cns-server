@@ -24,7 +24,6 @@ import (
 
 type Server struct {
 	l          *zap.SugaredLogger
-	gl         *zap.Logger
 	DB         *database.Instance
 	g          *gin.Engine
 	KubeClient *kube.Client

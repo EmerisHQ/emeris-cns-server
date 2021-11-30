@@ -54,7 +54,6 @@ func (r *router) denomsDataHandler(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, resp)
 
-	return
 }
 
 func queryDenomData(chainName string) (denomsDataResponse, error) {

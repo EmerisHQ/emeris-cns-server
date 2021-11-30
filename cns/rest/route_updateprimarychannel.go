@@ -38,8 +38,6 @@ func (r *router) updatePrimaryChannelHandler(ctx *gin.Context) {
 		r.s.l.Error("cannot update primary channel", err)
 		return
 	}
-
-	return
 }
 func (r *router) updatePrimaryChannel() (string, gin.HandlerFunc) {
 	return updatePrimaryChannelRoute, r.updatePrimaryChannelHandler

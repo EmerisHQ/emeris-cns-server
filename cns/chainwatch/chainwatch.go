@@ -366,7 +366,7 @@ func (i *Instance) chainsConnectedAndToConnectTo(chainName string, alwaysConnect
 
 		i.l.Debugw("chains between", "chainName", chainName, "other", c.ChainName, "conns", conns)
 
-		if conns == nil || len(conns) == 0 || alwaysConnect {
+		if len(conns) == 0 || alwaysConnect {
 			ret = append(ret, c.ChainName) // c.ChainName is not connected to chainName, or alwaysConnect is true
 		} else {
 			cc := connectedChain{
