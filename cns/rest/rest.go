@@ -57,6 +57,7 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 	validation.JSONFields(binding.Validator)
 	validation.DerivationPath(binding.Validator)
 	validation.CosmosRPCURL(binding.Validator)
+	validation.Semver(binding.Validator)
 
 	g.Use(logging.LogRequest(l.Desugar()))
 	g.Use(ginzap.RecoveryWithZap(l.Desugar(), true))
