@@ -155,9 +155,8 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 
 	// return 201
 	ctx.Writer.WriteHeader(http.StatusCreated)
-
-	return
 }
+
 func (r *router) addChain() (string, gin.HandlerFunc) {
 	return AddChainRoute, r.addChainHandler
 }

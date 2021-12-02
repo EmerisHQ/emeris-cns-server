@@ -87,7 +87,13 @@ func (i *Instance) DeleteChain(chain string) error {
 func (i *Instance) Chain(chain string) (models.Chain, error) {
 	var c models.Chain
 
-	err := i.Instance.DB.Get(&c, fmt.Sprintf("SELECT * FROM cns.chains WHERE chain_name='%s' limit 1;", chain))
+	n, err := i.Instance.DB.PrepareNamed(getChain)
+	if err != nil {
+		return models.Chain{}, err
+	}
+	err = n.Get(&c, map[string]interface{}{
+		"chain": chain,
+	})
 
 	return c, err
 }

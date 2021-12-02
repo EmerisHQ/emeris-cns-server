@@ -90,7 +90,7 @@ SELECT * FROM cns.chains
 `
 
 const getChain = `
-SELECT * FROM cns.chains WHERE chain_name='?' limit 1;
+SELECT * FROM cns.chains WHERE chain_name=:chain limit 1;
 `
 
 const channelsBetweenChains = `

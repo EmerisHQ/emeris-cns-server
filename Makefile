@@ -19,5 +19,9 @@ generate-mocks:
 	@rm mocks/*.go || true
 	mockery --srcpkg sigs.k8s.io/controller-runtime/pkg/client --name Client
 
+test:
+	go test -v -race ./...
+
 $(OBJS):
+	golangci-lint run ./...
 	go build -o build/$@ -ldflags='-X main.Version=${BRANCH}-${COMMIT}' ${EXTRAFLAGS} ${BASEPKG}/cmd/$@
