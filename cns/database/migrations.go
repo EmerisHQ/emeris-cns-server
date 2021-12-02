@@ -47,7 +47,8 @@ INSERT INTO cns.chains
 		derivation_path,
 		supported_wallets,
 		block_explorer,
-		public_node_endpoints
+		public_node_endpoints,
+		cosmos_sdk_version
 	)
 VALUES
 	(
@@ -64,7 +65,8 @@ VALUES
 		:derivation_path,
 		:supported_wallets,
 		:block_explorer,
-		:public_node_endpoints
+		:public_node_endpoints,
+		:cosmos_sdk_version
 	)
 ON CONFLICT
 	(chain_name)
@@ -82,7 +84,8 @@ DO UPDATE SET
 		derivation_path=EXCLUDED.derivation_path,
 		supported_wallets=EXCLUDED.supported_wallets,
 		block_explorer=EXCLUDED.block_explorer,
-		public_node_endpoints=EXCLUDED.public_node_endpoints;
+		public_node_endpoints=EXCLUDED.public_node_endpoints,
+		cosmos_sdk_version=EXCLUDED.cosmos_sdk_version;
 `
 
 const getAllChains = `
