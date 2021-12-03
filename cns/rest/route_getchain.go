@@ -1,6 +1,8 @@
 package rest
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -9,9 +11,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const getChainRoute = "/chain/:chain"
+const (
+	GetChainRoute = "/chain/:chain"
+)
 
-type getChainResp struct {
+type GetChainResp struct {
 	Chain models.Chain `json:"chain"`
 }
 
@@ -20,9 +24,10 @@ type getChainResp struct {
 // @Router /chain/{chain} [get]
 // @Param chain path string true "Chain name to return"
 // @Produce json
-// @Success 200 {object} getChainResp
+// @Success 200 {object} GetChainResp
 // @Failure 400 "if name is missing"
-// @Failure 500
+// @Failure 404 "if chain not found"
+// @Failure 500 "on error"
 func (r *router) getChainHandler(ctx *gin.Context) {
 
 	chain, ok := ctx.Params.Get("chain")
@@ -31,17 +36,21 @@ func (r *router) getChainHandler(ctx *gin.Context) {
 		e(ctx, http.StatusBadRequest, fmt.Errorf("chain not supplied"))
 	}
 
-	data, err := r.s.d.Chain(chain)
+	data, err := r.s.DB.Chain(chain)
 
 	if err != nil {
-		e(ctx, http.StatusInternalServerError, err)
+		if errors.Is(err, sql.ErrNoRows) {
+			e(ctx, http.StatusNotFound, err)
+		} else {
+			e(ctx, http.StatusInternalServerError, err)
+		}
 		return
 	}
 
-	ctx.JSON(http.StatusOK, getChainResp{
+	ctx.JSON(http.StatusOK, GetChainResp{
 		Chain: data,
 	})
 }
 func (r *router) getChain() (string, gin.HandlerFunc) {
-	return getChainRoute, r.getChainHandler
+	return GetChainRoute, r.getChainHandler
 }

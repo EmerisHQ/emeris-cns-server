@@ -33,13 +33,11 @@ func (r *router) updateDenomsHandler(ctx *gin.Context) {
 
 	}
 
-	if err := r.s.d.UpdateDenoms(req.Chain, req.Denoms); err != nil {
+	if err := r.s.DB.UpdateDenoms(req.Chain, req.Denoms); err != nil {
 		e(ctx, http.StatusInternalServerError, err)
 		r.s.l.Error("cannot update denoms", err)
 		return
 	}
-
-	return
 }
 func (r *router) updateDenoms() (string, gin.HandlerFunc) {
 	return updateDenomsRoute, r.updateDenomsHandler

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
+	"github.com/allinbits/emeris-cns-server/cns/config"
 	"github.com/allinbits/emeris-cns-server/cns/database"
 	"github.com/allinbits/emeris-cns-server/cns/rest"
 	"github.com/allinbits/emeris-cns-server/utils/k8s"
@@ -11,7 +12,7 @@ import (
 var Version = "not specified"
 
 func main() {
-	config, err := readConfig()
+	config, err := config.ReadConfig()
 	if err != nil {
 		panic(err)
 	}
@@ -52,10 +53,9 @@ func main() {
 	restServer := rest.NewServer(
 		logger,
 		di,
-		&kube,
+		kube,
 		rc,
-		config.KubernetesNamespace,
-		config.Debug,
+		config,
 	)
 
 	if err := restServer.Serve(config.RESTAddress); err != nil {

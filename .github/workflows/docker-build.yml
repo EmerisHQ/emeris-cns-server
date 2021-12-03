@@ -2,9 +2,6 @@ name: Build Docker images
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
@@ -73,3 +70,16 @@ jobs:
           tags: gcr.io/tendermint-dev/emeris-cns-server:${{ steps.get_version.outputs.version-without-v }},gcr.io/tendermint-dev/emeris-cns-server:${{ github.sha }}
           build-args: |
             GIT_TOKEN=${{ secrets.TENDERBOT_GIT_TOKEN }}
+
+  deploy-on-dev:
+    runs-on: self-hosted
+    needs: cns-server
+
+    steps:
+      - name: Call repository_dispatch on demeris-backend
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.TENDERBOT_GIT_TOKEN }}
+          repository: allinbits/demeris-backend
+          event-type: dev-push-cns-server
+          client-payload: '{"repo_name":"emeris-cns-server","branch_name":"main","image_name":"emeris-cns-server","image_sha":"${{ github.sha }}","service_name":"cns-server"}'
