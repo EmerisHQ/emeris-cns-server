@@ -222,7 +222,6 @@
                 <b-checkbox v-model="props.row.verified" />
               </b-table-column>
             </template>
-
           </b-table>
         </card-component>
       </tiles>
@@ -300,7 +299,7 @@ export default {
     CardComponent,
     Tiles,
     HeroBar,
-    TitleBar
+    TitleBar,
   },
   data() {
     return {
@@ -314,9 +313,9 @@ export default {
         gas_price_levels: {
           low: 0.015,
           average: 0.022,
-          high: 0.042
-        }
-      }
+          high: 0.042,
+        },
+      },
     };
   },
   computed: {
@@ -335,7 +334,7 @@ export default {
       let a = [];
       console.log(this.chain.primary_channel);
       if (this.chain.primary_channel) {
-        Object.keys(this.chain.primary_channel).forEach(key =>
+        Object.keys(this.chain.primary_channel).forEach((key) =>
           a.push({ name: key, channel: this.chain.primary_channel[key] })
         );
       }
@@ -343,14 +342,14 @@ export default {
       console.log(a);
 
       return a;
-    }
+    },
   },
   async created() {
-    this.$store.state.chains.forEach(chain => {
+    this.$store.state.chains.forEach((chain) => {
       if (chain.chain_name == this.$route.params.id) {
-        this.chain = chain
+        this.chain = chain;
       }
-    })
+    });
   },
   async mounted() {
     await this.loadData();
@@ -362,7 +361,7 @@ export default {
         denoms: [],
         primaryChannels: {},
         display_name: "",
-        node_info: {}
+        node_info: {},
       };
     },
     async loadData() {
@@ -378,7 +377,7 @@ export default {
       }
     },
     async update() {
-      this.chain.denoms.forEach(denom => {
+      this.chain.denoms.forEach((denom) => {
         denom.gas_price_levels.low = denom.gas_price_levels.low
           ? parseFloat(denom.gas_price_levels.low)
           : 0.015;
@@ -389,7 +388,15 @@ export default {
           ? parseFloat(denom.gas_price_levels.high)
           : 0.042;
       });
-      let res = await axios.post("/add", this.chain);
+
+      let authToken = await this.$fire.auth.currentUser.getIdToken(true);
+      console.log(authToken);
+      let res = await axios.post("/add", this.chain, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `JWT ${authToken}`,
+        },
+      });
       if (res.status != 200) {
         this.errorText = res.error;
       } else {
@@ -402,7 +409,7 @@ export default {
     },
     async add() {
       var overwriting = false;
-      this.chain.denoms.forEach(denom => {
+      this.chain.denoms.forEach((denom) => {
         if (denom.name == this.newDenom.name) {
           overwriting = true;
         }
@@ -421,16 +428,16 @@ export default {
         gas_price_levels: {
           low: 0.015,
           average: 0.022,
-          high: 0.042
-        }
+          high: 0.042,
+        },
       };
       this.isModalActive = false;
-    }
+    },
   },
   head() {
     return {
-      title: "Chain"
+      title: "Chain",
     };
-  }
+  },
 };
 </script>
