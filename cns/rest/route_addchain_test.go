@@ -22,28 +22,40 @@ import (
 func TestAddChain(t *testing.T) {
 
 	setupMockK8sClient()
+	// setupMockAuthClient()
 
 	tests := []struct {
 		name             string
 		dataStruct       cns.Chain
+		jwtToken         string
 		expectedHttpCode int
 		success          bool
 	}{
 		{
 			"Add Chain - Invalid",
 			cns.Chain{},
+			validJWTToken,
 			400,
+			true,
+		},
+		{
+			"Add Chain - Unauthorized",
+			cns.Chain{},
+			invalidToken,
+			401,
 			true,
 		},
 		{
 			"Add Chain - Without PublicEndpoint",
 			chainWithoutPublicEndpoints,
+			validJWTToken,
 			201,
 			true,
 		},
 		{
 			"Add Chain - With PublicEndpoints",
 			chainWithPublicEndpoints,
+			validJWTToken,
 			201,
 			true,
 		},
@@ -63,7 +75,11 @@ func TestAddChain(t *testing.T) {
 			payload, _ := json.Marshal(addReq)
 
 			// act
-			resp, err := http.Post(fmt.Sprintf("http://%s%s", testingCtx.server.Config.RESTAddress, rest.AddChainRoute), "application/json", strings.NewReader(string(payload)))
+			req, _ := http.NewRequest("POST", fmt.Sprintf("http://%s%s", testingCtx.server.Config.RESTAddress, rest.AddChainRoute), strings.NewReader(string(payload)))
+			req.Header.Add("Content-Type", "application/json")
+			req.Header.Add("Authorization", tt.jwtToken)
+
+			resp, err := http.DefaultClient.Do(req)
 
 			// assert
 			if !tt.success {
@@ -101,3 +117,43 @@ func setupMockK8sClient() {
 		mock.Anything, // client.ObjectList
 	).Return(func(context.Context, client.Object, ...client.CreateOption) error { return nil })
 }
+
+// func setupMockAuthClient() {
+// 	authClient := *testingCtx.server.AuthClient
+
+// 	authClient = authClient.(*mocks.AuthClient)
+
+// 	// authClient.(*mocks.AuthClient).On("AuthUser").Return(func() gin.HandlerFunc {
+// 	// 	return func(ctx *gin.Context) {
+// 	// 		auth := middleware.AuthHeader{}
+
+// 	// 		if err := ctx.ShouldBindHeader(&auth); err != nil {
+// 	// 			jsonErr := middleware.AuthError{
+// 	// 				Error: err.Error(),
+// 	// 			}
+
+// 	// 			_ = ctx.Error(err)
+// 	// 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, jsonErr)
+// 	// 			return
+// 	// 		}
+
+// 	// 		jwtTokenHeader := strings.Split(auth.Token, "JWT ")
+
+// 	// 		if len(jwtTokenHeader) != 2 {
+
+// 	// 			err := fmt.Errorf("invalid auth token")
+
+// 	// 			jsonErr := middleware.AuthError{
+// 	// 				Error: err.Error(),
+// 	// 			}
+
+// 	// 			_ = ctx.Error(err)
+// 	// 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, jsonErr)
+// 	// 			return
+// 	// 		}
+
+// 	// 		ctx.Next()
+// 	// 	}
+// 	// })
+
+// }
