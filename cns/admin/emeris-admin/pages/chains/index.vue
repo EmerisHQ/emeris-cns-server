@@ -68,12 +68,21 @@ export default {
 
       let json = JSON.parse(jsontxt);
 
+      let authToken = await this.$fire.auth.currentUser.getIdToken(true);
+      console.log(authToken);
+
       axios
-        .post("/add", json)
+        .post("/add", json, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `JWT ${authToken}`,
+          },
+        })
         .then((res) => {
           this.$buefy.toast.open({
             message: `Successfully uploaded file. Adding chain ${json.chain_name}`,
           });
+          this.$nuxt.refresh();
         })
         .catch((err) => {
           this.$buefy.toast.open({
