@@ -78,8 +78,8 @@ func TestAddChain(t *testing.T) {
 				//   How to verify the chain from the DB?
 			}
 		})
-		truncateDB(t)
 	}
+	truncateDB(t)
 }
 
 // Prepare the mock for the calls to expect
