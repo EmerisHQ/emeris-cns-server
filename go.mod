@@ -23,7 +23,6 @@ require (
 	github.com/jmoiron/sqlx v1.3.3
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lib/pq v1.10.3
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.1-0.20210427113832-6241f9ab9942
@@ -44,6 +43,8 @@ require (
 	github.com/tendermint/tendermint v0.34.11
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43 // indirect
 )
+
+require github.com/allinbits/emeris-utils v0.0.0-20211210141153-0564b764708d
 
 require (
 	github.com/99designs/keyring v1.1.6 // indirect

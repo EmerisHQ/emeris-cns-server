@@ -7,7 +7,7 @@ import (
 	_ "github.com/lib/pq"
 
 	models "github.com/allinbits/demeris-backend-models/cns"
-	dbutils "github.com/allinbits/emeris-cns-server/utils/database"
+	dbutils "github.com/allinbits/emeris-utils/database"
 )
 
 type Instance struct {

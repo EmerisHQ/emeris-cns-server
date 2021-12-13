@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/allinbits/demeris-backend-models/validation"
-	"github.com/allinbits/emeris-cns-server/utils/configuration"
+	"github.com/allinbits/emeris-utils/configuration"
 
 	"github.com/go-playground/validator/v10"
 )
