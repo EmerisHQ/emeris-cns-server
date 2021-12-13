@@ -38,7 +38,7 @@ require (
 
 require (
 	github.com/alicebob/miniredis/v2 v2.16.0
-	github.com/allinbits/demeris-backend-models v0.0.0-20211116145636-4485bb7af3c0
+	github.com/allinbits/demeris-backend-models v0.0.0-20211202094520-07017cad0218
 	github.com/google/go-cmp v0.5.5
 	github.com/swaggo/swag v1.7.4
 	github.com/tendermint/tendermint v0.34.11
@@ -168,6 +168,7 @@ require (
 	go.opentelemetry.io/otel/trace v0.20.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
+	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
 	golang.org/x/sys v0.0.0-20210816183151-1e6c022a8912 // indirect
 	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d // indirect

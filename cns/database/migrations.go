@@ -47,7 +47,8 @@ INSERT INTO cns.chains
 		derivation_path,
 		supported_wallets,
 		block_explorer,
-		public_node_endpoints
+		public_node_endpoints,
+		cosmos_sdk_version
 	)
 VALUES
 	(
@@ -64,7 +65,8 @@ VALUES
 		:derivation_path,
 		:supported_wallets,
 		:block_explorer,
-		:public_node_endpoints
+		:public_node_endpoints,
+		:cosmos_sdk_version
 	)
 ON CONFLICT
 	(chain_name)
@@ -82,7 +84,8 @@ DO UPDATE SET
 		derivation_path=EXCLUDED.derivation_path,
 		supported_wallets=EXCLUDED.supported_wallets,
 		block_explorer=EXCLUDED.block_explorer,
-		public_node_endpoints=EXCLUDED.public_node_endpoints;
+		public_node_endpoints=EXCLUDED.public_node_endpoints,
+		cosmos_sdk_version=EXCLUDED.cosmos_sdk_version;
 `
 
 const getAllChains = `
@@ -170,6 +173,9 @@ ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS block_explorer string;
 const addColumnPublicNodeEndpoints = `
 ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS public_node_endpoints jsonb DEFAULT '{}';
 `
+const addColumnCosmosSDKVersion = `
+ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS cosmos_sdk_version string DEFAULT 'v0.42.10';
+`
 
 var migrationList = []string{
 	createDatabase,
@@ -177,6 +183,7 @@ var migrationList = []string{
 	addColumnSupportedWallets,
 	addColumnBlockExplorer,
 	addColumnPublicNodeEndpoints,
+	addColumnCosmosSDKVersion,
 }
 
 func (i *Instance) runMigrations() {
