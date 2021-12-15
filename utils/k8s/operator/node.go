@@ -105,54 +105,60 @@ func (n NodeConfiguration) Validate() error {
 	return nil
 }
 
-var DefaultNodeConfig = v1.NodeSet{
-	ObjectMeta: metav1.ObjectMeta{
-		// Users must provide "Name" field
-		Namespace: defaultNamespace,
-	},
-	Spec: v1.NodeSetSpec{
-		Replicas: 1,
-		App:      v1.AppDetails{
-			// Users must provide "Name,DaemonName,CliName" field, they should probably all be
-			// the same.
+func DefaultNodeConfig() v1.NodeSet {
+	return v1.NodeSet{
+		ObjectMeta: metav1.ObjectMeta{
+			// Users must provide "Name" field
+			Namespace: defaultNamespace,
 		},
-		Moniker: defaultMoniker,
-	},
+		Spec: v1.NodeSetSpec{
+			Replicas: 1,
+			App:      v1.AppDetails{
+				// Users must provide "Name,DaemonName,CliName" field, they should probably all be
+				// the same.
+			},
+			Moniker: defaultMoniker,
+		},
+	}
 }
 
-var defaultTracelistenerConfig = v1.TraceStoreContainerConfig{
-	Image:           tracelistenerImage,
-	ImagePullPolicy: corev1.PullAlways,
-	Env: []corev1.EnvVar{
-		{
-			Name:  trFifoPathVar,
-			Value: trFifoPath,
+func defaultTracelistenerConfig() v1.TraceStoreContainerConfig {
+	return v1.TraceStoreContainerConfig{
+		Image:           tracelistenerImage,
+		ImagePullPolicy: corev1.PullAlways,
+		Env: []corev1.EnvVar{
+			{
+				Name:  trFifoPathVar,
+				Value: trFifoPath,
+			},
+			{
+				Name:  trDbURLVar,
+				Value: trDbURL,
+			},
+			{
+				Name:  trTypeVar,
+				Value: trType,
+			},
 		},
-		{
-			Name:  trDbURLVar,
-			Value: trDbURL,
-		},
-		{
-			Name:  trTypeVar,
-			Value: trType,
-		},
-	},
+	}
 }
 
-var defaultConfig = v1.NodeSetConfig{
-	Nodes: &v1.NodeSetConfigNodes{
-		StartupTimeout: &defaultStartupTimeout,
-	},
-	AdditionalEgressRules: []netv1.NetworkPolicyEgressRule{
-		{
-			Ports: []netv1.NetworkPolicyPort{
-				{
-					Protocol: &defaultProtocol,
-					Port:     &defaultPort,
+func defaultConfig() v1.NodeSetConfig {
+	return v1.NodeSetConfig{
+		Nodes: &v1.NodeSetConfigNodes{
+			StartupTimeout: &defaultStartupTimeout,
+		},
+		AdditionalEgressRules: []netv1.NetworkPolicyEgressRule{
+			{
+				Ports: []netv1.NetworkPolicyPort{
+					{
+						Protocol: &defaultProtocol,
+						Port:     &defaultPort,
+					},
 				},
 			},
 		},
-	},
+	}
 }
 
 func NewNode(c NodeConfiguration) (*v1.NodeSet, error) {
@@ -168,7 +174,7 @@ func NewNode(c NodeConfiguration) (*v1.NodeSet, error) {
 		c.TracelistenerImage = tracelistenerImage
 	}
 
-	var node = DefaultNodeConfig
+	node := DefaultNodeConfig()
 
 	node.ObjectMeta.Namespace = c.Namespace
 
@@ -195,7 +201,7 @@ func NewNode(c NodeConfiguration) (*v1.NodeSet, error) {
 		ns.Join = c.JoinConfig
 	}
 
-	tracelistenerConfig := defaultTracelistenerConfig
+	tracelistenerConfig := defaultTracelistenerConfig()
 
 	tracelistenerConfig.Image = c.TracelistenerImage
 
@@ -209,7 +215,7 @@ func NewNode(c NodeConfiguration) (*v1.NodeSet, error) {
 		Value: strconv.FormatBool(c.TracelistenerDebug),
 	})
 
-	nodeConfig := defaultConfig
+	nodeConfig := defaultConfig()
 	nodeConfig.Nodes.TraceStoreContainer = &tracelistenerConfig
 
 	node.Spec.Config = &nodeConfig

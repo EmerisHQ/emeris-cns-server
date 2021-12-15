@@ -54,6 +54,7 @@ var chainWithoutPublicEndpoints = cns.Chain{
 	DerivationPath:   "m/44'/60'/0'/1",
 	SupportedWallets: pq.StringArray([]string{"keplr"}),
 	BlockExplorer:    "http://explorer.com",
+	CosmosSDKVersion: "v0.42.10",
 }
 
 var chainWithPublicEndpoints = cns.Chain{
@@ -105,6 +106,7 @@ var chainWithPublicEndpoints = cns.Chain{
 		TendermintRPC: "https://www.host.com:1234",
 		CosmosAPI:     "https://host.foo.bar:2345",
 	},
+	CosmosSDKVersion: "v0.44.3",
 }
 
 var nodeRPC = v1.NodeRPC{
