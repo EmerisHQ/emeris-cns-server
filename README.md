@@ -1,6 +1,11 @@
 # CNS
 
-Emeris configuration service.  
+[![codecov](https://codecov.io/gh/allinbits/emeris-cns-server/branch/main/graph/badge.svg?token=WTVZN0DSFP)](https://codecov.io/gh/allinbits/emeris-cns-server)
+[![Build status](https://github.com/allinbits/emeris-cns-server/workflows/Build/badge.svg)](https://github.com/allinbits/emeris-cns-server/commits/main)
+[![Tests status](https://github.com/allinbits/emeris-cns-server/workflows/Tests/badge.svg)](https://github.com/allinbits/emeris-cns-server/commits/main)
+[![Lint](https://github.com/allinbits/emeris-cns-server/workflows/Lint/badge.svg?token)](https://github.com/allinbits/emeris-cns-server/commits/main)
+
+Emeris configuration service.
 Allows admins to add and configure supported chains and tokens.
 
 ## Actions
