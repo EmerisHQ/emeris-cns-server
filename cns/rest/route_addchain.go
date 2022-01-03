@@ -5,19 +5,15 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	v12 "k8s.io/api/core/v1"
 
-	v1 "github.com/allinbits/starport-operator/api/v1"
-
-	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
-
-	"github.com/allinbits/demeris-backend-models/validation"
-
-	"github.com/allinbits/emeris-cns-server/utils/k8s"
-
 	models "github.com/allinbits/demeris-backend-models/cns"
-	"github.com/allinbits/emeris-cns-server/utils/k8s/operator"
-	"github.com/gin-gonic/gin"
+	"github.com/allinbits/demeris-backend-models/validation"
+	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
+	"github.com/allinbits/emeris-utils/k8s"
+	"github.com/allinbits/emeris-utils/k8s/operator"
+	v1 "github.com/allinbits/starport-operator/api/v1"
 )
 
 const AddChainRoute = "/add"

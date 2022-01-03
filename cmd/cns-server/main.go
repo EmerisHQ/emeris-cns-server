@@ -5,8 +5,8 @@ import (
 	"github.com/allinbits/emeris-cns-server/cns/config"
 	"github.com/allinbits/emeris-cns-server/cns/database"
 	"github.com/allinbits/emeris-cns-server/cns/rest"
-	"github.com/allinbits/emeris-cns-server/utils/k8s"
-	"github.com/allinbits/emeris-cns-server/utils/logging"
+	"github.com/allinbits/emeris-utils/k8s"
+	"github.com/allinbits/emeris-utils/logging"
 )
 
 var Version = "not specified"

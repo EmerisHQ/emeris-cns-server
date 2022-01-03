@@ -16,7 +16,7 @@ import (
 	"github.com/go-playground/validator/v10"
 
 	"github.com/allinbits/emeris-cns-server/cns/database"
-	"github.com/allinbits/emeris-cns-server/utils/logging"
+	"github.com/allinbits/emeris-utils/logging"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

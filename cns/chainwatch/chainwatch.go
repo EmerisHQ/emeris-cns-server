@@ -5,18 +5,14 @@ import (
 	"fmt"
 	"time"
 
-	models "github.com/allinbits/demeris-backend-models/cns"
-
-	"github.com/allinbits/emeris-cns-server/cns/database"
-
-	"github.com/allinbits/emeris-cns-server/utils/k8s/operator"
-
-	v1 "github.com/allinbits/starport-operator/api/v1"
-
-	"github.com/allinbits/emeris-cns-server/utils/k8s"
-
 	"go.uber.org/zap"
 	kube "sigs.k8s.io/controller-runtime/pkg/client"
+
+	models "github.com/allinbits/demeris-backend-models/cns"
+	"github.com/allinbits/emeris-cns-server/cns/database"
+	"github.com/allinbits/emeris-utils/k8s"
+	"github.com/allinbits/emeris-utils/k8s/operator"
+	v1 "github.com/allinbits/starport-operator/api/v1"
 )
 
 var (
