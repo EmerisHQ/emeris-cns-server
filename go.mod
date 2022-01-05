@@ -15,7 +15,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.42.8
 	github.com/gin-contrib/zap v0.0.1
 	github.com/gin-gonic/gin v1.7.4
-	github.com/go-playground/validator/v10 v10.9.0
+	github.com/go-playground/validator/v10 v10.10.0
 	github.com/go-redis/redis/v8 v8.8.3
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/iamolegga/enviper v1.2.1
