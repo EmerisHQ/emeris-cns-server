@@ -6,7 +6,7 @@ on:
   push:
 
 env:
-  CODECOV_TOKEN: 659c6faf-119c-46d9-8401-5ae00f21e202
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
   code_cov:
