@@ -11,7 +11,7 @@ import (
 
 	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
 
-	"github.com/allinbits/emeris-cns-server/utils/validation"
+	"github.com/allinbits/demeris-backend-models/validation"
 
 	"github.com/allinbits/emeris-cns-server/utils/k8s"
 
@@ -20,9 +20,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const addChainRoute = "/add"
+const AddChainRoute = "/add"
 
-type addChainRequest struct {
+type AddChainRequest struct {
 	models.Chain
 
 	SkipChannelCreation  bool                           `json:"skip_channel_creation"`
@@ -33,14 +33,18 @@ type addChainRequest struct {
 // @Summary Add a new chain configuration
 // @Description Add a new chain to the CNS DB
 // @Router /add [post]
-// @Param chain body addChainRequest true "Chain data to add"
+// @Param chain body AddChainRequest true "Chain data to add"
 // @Accept json
 // @Produce json
 // @Success 201
 // @Failure 400 "if cannot parse payload, or cannot validate: fees, denoms, relayer config"
 // @Failure 500
 func (r *router) addChainHandler(ctx *gin.Context) {
-	newChain := addChainRequest{}
+	newChain := AddChainRequest{}
+
+	usr, _ := ctx.Get("user")
+
+	r.s.l.Debug(usr)
 
 	if err := ctx.ShouldBindJSON(&newChain); err != nil {
 		e(ctx, http.StatusBadRequest, validation.MissingFieldsErr(err, false))
@@ -61,8 +65,8 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 	}
 
 	k := k8s.Querier{
-		Client:    *r.s.k,
-		Namespace: r.s.defaultK8SNamespace,
+		Client:    *r.s.KubeClient,
+		Namespace: r.s.Config.KubernetesNamespace,
 	}
 
 	if _, err := k.ChainByName(newChain.ChainName); !errors.Is(err, k8s.ErrNotFound) {
@@ -71,7 +75,7 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 	}
 
 	if newChain.NodeConfig != nil {
-		newChain.NodeConfig.Namespace = r.s.defaultK8SNamespace
+		newChain.NodeConfig.Namespace = r.s.Config.KubernetesNamespace
 
 		newChain.NodeConfig.Name = newChain.ChainName
 
@@ -81,7 +85,7 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 			newChain.NodeInfo.ChainID = *newChain.NodeConfig.TestnetConfig.ChainId
 		}
 
-		newChain.NodeConfig.TracelistenerDebug = r.s.debug
+		newChain.NodeConfig.TracelistenerDebug = r.s.Config.Debug
 
 		node, err := operator.NewNode(*newChain.NodeConfig)
 		if err != nil {
@@ -147,16 +151,17 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 		}
 	}
 
-	if err := r.s.d.AddChain(newChain.Chain); err != nil {
+	if err := r.s.DB.AddChain(newChain.Chain); err != nil {
 		e(ctx, http.StatusInternalServerError, err)
 		r.s.l.Error("cannot add chain", err)
 		return
 	}
 
-	return
+	// return 201
+	ctx.Writer.WriteHeader(http.StatusCreated)
 }
 func (r *router) addChain() (string, gin.HandlerFunc) {
-	return addChainRoute, r.addChainHandler
+	return AddChainRoute, r.addChainHandler
 }
 
 func validateFees(c models.Chain) error {
