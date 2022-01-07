@@ -39,6 +39,3 @@ func (r *router) updateDenomsHandler(ctx *gin.Context) {
 		return
 	}
 }
-func (r *router) updateDenoms() (string, gin.HandlerFunc) {
-	return updateDenomsRoute, r.updateDenomsHandler
-}
