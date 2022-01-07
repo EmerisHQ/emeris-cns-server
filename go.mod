@@ -23,9 +23,8 @@ require (
 	github.com/jmoiron/sqlx v1.3.3 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lib/pq v1.10.3
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
-	github.com/natefinch/lumberjack v2.0.0+incompatible
-	github.com/spf13/viper v1.10.1
+	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
+	github.com/spf13/viper v1.10.1 // indirect
 	github.com/stretchr/testify v1.7.1-0.20210427113832-6241f9ab9942
 	go.uber.org/zap v1.17.0
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
@@ -45,7 +44,7 @@ require (
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8 // indirect
 )
 
-require github.com/allinbits/emeris-utils v0.0.0-20211214203740-3e2cdc43f1fb
+require github.com/allinbits/emeris-utils v0.0.0-20220104112240-0cadfeac11ca
 
 require (
 	github.com/99designs/keyring v1.1.6 // indirect
@@ -80,6 +79,7 @@ require (
 	github.com/enigmampc/btcutil v1.0.3-0.20200723161021-e2fb6adb2a25 // indirect
 	github.com/ethereum/go-ethereum v1.10.12 // indirect
 	github.com/evanphx/json-patch v4.11.0+incompatible // indirect
+	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
