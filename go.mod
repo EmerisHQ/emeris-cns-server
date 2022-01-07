@@ -15,7 +15,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.42.8
 	github.com/gin-contrib/zap v0.0.1
 	github.com/gin-gonic/gin v1.7.4
-	github.com/go-playground/validator/v10 v10.9.0
+	github.com/go-playground/validator/v10 v10.10.0
 	github.com/go-redis/redis/v8 v8.8.3
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/iamolegga/enviper v1.2.1
@@ -39,7 +39,7 @@ require (
 require (
 	github.com/alicebob/miniredis/v2 v2.16.0
 	github.com/allinbits/demeris-backend-models v0.0.0-20211202094520-07017cad0218
-	github.com/google/go-cmp v0.5.5
+	github.com/google/go-cmp v0.5.6
 	github.com/swaggo/swag v1.7.4
 	github.com/tendermint/tendermint v0.34.11
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43 // indirect
