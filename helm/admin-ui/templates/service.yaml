@@ -4,9 +4,9 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "chart.labels" . | indent 4 }}
+    {{- include "chart.labels.ui" . | indent 4 }}
 spec:
   ports:
-{{- include "ports.service" . | indent 2 }}
+{{- include "ports.service.ui" . | indent 2 }}
   selector:
-{{- include "chart.labels" . | indent 4 }}
+{{- include "chart.labels.ui" . | indent 4 }}

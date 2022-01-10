@@ -1,4 +1,4 @@
-{{- define "ports.service" }}
+{{- define "ports.service.ui" }}
 {{- range $key, $value := .Values.ports }}
 - port: {{ $v := $value | toString | splitList ":" }}{{$v | first}}
   name: {{ $key }}
@@ -6,14 +6,14 @@
 {{- end }}
 {{- end }}
 
-{{- define "ports.pod" }}
+{{- define "ports.pod.ui" }}
 {{- range $key, $value := .Values.ports }}
   - containerPort: {{ $v := $value | toString | splitList ":" }}{{$v | last}}
     name: {{ $key }}
 {{- end }}
 {{- end }}
 
-{{- define "chart.labels" }}
+{{- define "chart.labels.ui" }}
 app.kubernetes.io/name: {{ .Chart.Name }}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
