@@ -53,6 +53,3 @@ func (r *router) deleteChainHandler(ctx *gin.Context) {
 	}
 
 }
-func (r *router) deleteChain() (string, gin.HandlerFunc) {
-	return deleteChainRoute, r.deleteChainHandler
-}

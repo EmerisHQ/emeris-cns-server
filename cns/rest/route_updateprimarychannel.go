@@ -39,7 +39,3 @@ func (r *router) updatePrimaryChannelHandler(ctx *gin.Context) {
 		return
 	}
 }
-
-func (r *router) updatePrimaryChannel() (string, gin.HandlerFunc) {
-	return updatePrimaryChannelRoute, r.updatePrimaryChannelHandler
-}
