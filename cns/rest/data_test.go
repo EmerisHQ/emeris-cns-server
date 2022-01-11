@@ -158,3 +158,7 @@ var relayerConfig = operator.RelayerConfiguration{
 	MaxGas:         345,
 	TrustingPeriod: "10min",
 }
+
+var validJWTToken = "JWT arbitrarytokendata"
+
+var invalidToken = "Bearer arbitrarytokendata"

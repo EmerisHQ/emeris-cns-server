@@ -38,6 +38,10 @@ type AddChainRequest struct {
 func (r *router) addChainHandler(ctx *gin.Context) {
 	newChain := AddChainRequest{}
 
+	usr, _ := ctx.Get("user")
+
+	r.s.l.Debug(usr)
+
 	if err := ctx.ShouldBindJSON(&newChain); err != nil {
 		e(ctx, http.StatusBadRequest, validation.MissingFieldsErr(err, false))
 		r.s.l.Error("cannot bind input data to Chain struct", err)
@@ -151,10 +155,6 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 
 	// return 201
 	ctx.Writer.WriteHeader(http.StatusCreated)
-}
-
-func (r *router) addChain() (string, gin.HandlerFunc) {
-	return AddChainRoute, r.addChainHandler
 }
 
 func validateFees(c models.Chain) error {

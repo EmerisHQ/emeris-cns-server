@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/allinbits/emeris-cns-server/cns/config"
+	"github.com/allinbits/emeris-cns-server/cns/middleware"
 
 	"github.com/allinbits/demeris-backend-models/validation"
 	"github.com/gin-gonic/gin/binding"
@@ -13,12 +14,11 @@ import (
 
 	kube "sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/go-playground/validator/v10"
-
 	"github.com/allinbits/emeris-cns-server/cns/database"
 	"github.com/allinbits/emeris-utils/logging"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 )
 
@@ -29,13 +29,14 @@ type Server struct {
 	KubeClient *kube.Client
 	rc         *chainwatch.Connection
 	Config     *config.Config
+	AuthClient *middleware.AuthClient
 }
 
 type router struct {
 	s *Server
 }
 
-func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc *chainwatch.Connection, config *config.Config) *Server {
+func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc *chainwatch.Connection, config *config.Config, authClient middleware.AuthClient) *Server {
 	if !config.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -49,6 +50,7 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 		KubeClient: &kube,
 		rc:         rc,
 		Config:     config,
+		AuthClient: &authClient,
 	}
 
 	r := &router{s: s}
@@ -76,13 +78,15 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 		c.Next()
 	})
 
+	ac := *r.s.AuthClient
+
 	g.GET(r.getChain())
 	g.GET(r.getChains())
 	g.GET(r.denomsData())
-	g.POST(r.addChain())
-	g.POST(r.updatePrimaryChannel())
-	g.POST(r.updateDenoms())
-	g.DELETE(r.deleteChain())
+	g.POST(AddChainRoute, ac.AuthUser(), r.addChainHandler)
+	g.POST(updatePrimaryChannelRoute, ac.AuthUser(), r.updatePrimaryChannelHandler)
+	g.POST(updateDenomsRoute, ac.AuthUser(), r.updateDenomsHandler)
+	g.DELETE(deleteChainRoute, ac.AuthUser(), r.deleteChainHandler)
 
 	g.NoRoute(func(context *gin.Context) {
 		e(context, http.StatusNotFound, errors.New("not found"))

@@ -74,6 +74,9 @@ func setup() (*rest.Server, *gin.Context, *httptest.ResponseRecorder, func()) {
 	// --- K8s mock ---
 	kube := mocks.Client{}
 
+	// --- Auth Client mock ---
+	authClient := mocks.AuthClient{}
+
 	// --- Chainwatch process ---
 	redisConnection, err := chainwatch.NewConnection(redisAddr)
 	checkNoError(err, logger)
@@ -108,6 +111,7 @@ func setup() (*rest.Server, *gin.Context, *httptest.ResponseRecorder, func()) {
 		&kube,
 		redisConnection,
 		conf,
+		&authClient,
 	)
 
 	ch := make(chan struct{})

@@ -10,6 +10,7 @@ import (
 	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/gin-gonic/gin"
 )
@@ -57,7 +58,7 @@ func (r *router) denomsDataHandler(ctx *gin.Context) {
 }
 
 func queryDenomData(chainName string) (denomsDataResponse, error) {
-	grpcConn, err := grpc.Dial(fmt.Sprintf("%s:%d", chainName, grpcPort), grpc.WithInsecure())
+	grpcConn, err := grpc.Dial(fmt.Sprintf("%s:%d", chainName, grpcPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return denomsDataResponse{}, err
 	}
