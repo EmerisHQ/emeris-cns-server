@@ -16,13 +16,12 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/go-redis/redis/v8 v8.8.3
-	github.com/iamolegga/enviper v1.2.1
-	github.com/jackc/pgx/v4 v4.10.1
-	github.com/jmoiron/sqlx v1.3.3
+	github.com/iamolegga/enviper v1.2.1 // indirect
+	github.com/jackc/pgx/v4 v4.10.1 // indirect
+	github.com/jmoiron/sqlx v1.3.3 // indirect
 	github.com/lib/pq v1.10.4
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
-	github.com/natefinch/lumberjack v2.0.0+incompatible
-	github.com/spf13/viper v1.10.1
+	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
+	github.com/spf13/viper v1.10.1 // indirect
 	github.com/stretchr/testify v1.7.1-0.20210427113832-6241f9ab9942
 	go.uber.org/zap v1.17.0
 	google.golang.org/grpc v1.43.0
@@ -40,7 +39,7 @@ require (
 	github.com/tendermint/tendermint v0.34.11
 )
 
-require github.com/allinbits/emeris-utils v0.0.0-20220104112240-0cadfeac11ca
+require github.com/allinbits/emeris-utils v0.0.0-20220111144137-74da43e7bb11
 
 require (
 	firebase.google.com/go/v4 v4.6.1
@@ -194,6 +193,7 @@ require (
 	go.opentelemetry.io/otel/trace v0.20.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8 // indirect
