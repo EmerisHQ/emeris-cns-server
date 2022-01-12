@@ -15,7 +15,7 @@ import (
 	kube "sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/allinbits/emeris-cns-server/cns/database"
-	"github.com/allinbits/emeris-cns-server/utils/logging"
+	"github.com/allinbits/emeris-utils/logging"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

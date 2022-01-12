@@ -16,7 +16,7 @@ import (
 	"github.com/allinbits/emeris-cns-server/cns/config"
 	"github.com/allinbits/emeris-cns-server/cns/database"
 	"github.com/allinbits/emeris-cns-server/mocks"
-	"github.com/allinbits/emeris-cns-server/utils/logging"
+	"github.com/allinbits/emeris-utils/logging"
 	"github.com/cockroachdb/cockroach-go/v2/testserver"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

@@ -8,7 +8,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/allinbits/emeris-cns-server/utils/k8s/operator"
+	"github.com/allinbits/emeris-utils/k8s/operator"
 
 	r "github.com/go-redis/redis/v8"
 )

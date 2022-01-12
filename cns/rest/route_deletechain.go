@@ -6,7 +6,7 @@ import (
 
 	"github.com/allinbits/demeris-backend-models/validation"
 
-	"github.com/allinbits/emeris-cns-server/utils/k8s"
+	"github.com/allinbits/emeris-utils/k8s"
 
 	"github.com/gin-gonic/gin"
 )
