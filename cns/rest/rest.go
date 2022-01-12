@@ -3,6 +3,7 @@ package rest
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/allinbits/emeris-cns-server/cns/config"
 	"github.com/allinbits/emeris-cns-server/cns/middleware"
@@ -16,6 +17,7 @@ import (
 
 	"github.com/allinbits/emeris-cns-server/cns/database"
 	"github.com/allinbits/emeris-cns-server/utils/logging"
+	"github.com/gin-contrib/cors"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -63,13 +65,16 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 	g.Use(logging.LogRequest(l.Desugar()))
 	g.Use(ginzap.RecoveryWithZap(l.Desugar(), true))
 
+	g.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"https://emeris-admin.netlify.app/", "https://staging--emeris-admin.netlify.app", "https://develop--emeris-admin.netlify.app"},
+		AllowMethods:     []string{"GET", "POST", "OPTIONS", "HEAD", "DELETE", "PUT"},
+		AllowHeaders:     []string{"Content-Length", "Content-Type", "Accept-Encoding", "X-CSRF-TOKEN", "Authorization", "accept", "origin", "Cache-Control", "X-Requested-With"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           1 * time.Minute,
+	}))
+
 	g.Use(func(c *gin.Context) {
-
-		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Allow-Credentials", "true")
-		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH,OPTIONS,GET,PUT")
-
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
 			return

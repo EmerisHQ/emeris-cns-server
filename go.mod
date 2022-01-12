@@ -42,6 +42,7 @@ require (
 
 require (
 	firebase.google.com/go/v4 v4.6.1
+	github.com/gin-contrib/cors v1.3.1
 	google.golang.org/api v0.63.0
 )
 
