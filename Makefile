@@ -20,7 +20,7 @@ generate-mocks:
 	mockery --srcpkg sigs.k8s.io/controller-runtime/pkg/client --name Client
 
 test:
-	go test -v -race ./...
+	go test -v -race ./... -cover
 
 lint:
 	golangci-lint run ./...
