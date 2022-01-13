@@ -1,7 +1,6 @@
 package chainwatch
 
 import (
-	"errors"
 	"fmt"
 	"time"
 
@@ -11,14 +10,7 @@ import (
 	models "github.com/allinbits/demeris-backend-models/cns"
 	"github.com/allinbits/emeris-cns-server/cns/database"
 	"github.com/allinbits/emeris-utils/k8s"
-	"github.com/allinbits/emeris-utils/k8s/operator"
 	v1 "github.com/allinbits/starport-operator/api/v1"
-)
-
-var (
-	relayerDebugLogLevel       = "debug"
-	maxGas               int64 = 6000000
-	clearPacketsInterval int64 = 600
 )
 
 type Instance struct {
@@ -63,7 +55,7 @@ func (i *Instance) Run() {
 
 		i.l.Debugw("chains in cache", "list", chains)
 
-		for idx, chain := range chains {
+		for _, chain := range chains {
 			chainStatus, found, err := i.c.ChainStatus(chain.Name)
 			if err != nil {
 				i.l.Errorw("cannot query chain status from redis at beginning of chains loop", "chainName", chain.Name, "error", err)
@@ -110,11 +102,6 @@ func (i *Instance) Run() {
 
 				i.l.Debugw("chain status update", "name", chain.Name, "new_status", running.String())
 			case running:
-				if err := i.chainFinished(chains[idx]); err != nil {
-					i.l.Errorw("cannot execute chain finished routine", "error", err)
-					continue
-				}
-
 				if err := i.c.SetChainStatus(chain.Name, relayerConnecting); err != nil {
 					i.l.Errorw("cannot set chain status in redis", "chainName", chain.Name, "error", err, "newStatus", relayerConnecting.String())
 					continue
@@ -174,251 +161,9 @@ func (i *Instance) Run() {
 	}
 }
 
-func (i *Instance) chainFinished(chain Chain) error {
-	// create relayers
-	if err := i.createRelayer(chain); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (i *Instance) createRelayer(chain Chain) error {
-	relayerDenom, err := i.relayerDenom(chain.Name)
-	if err != nil {
-		return err
-	}
-
-	q := k8s.Querier{
-		Client:    i.k,
-		Namespace: i.defaultNamespace,
-	}
-
-	cfg := operator.RelayerConfig{
-		NodesetName:   chain.Name,
-		HDPath:        chain.HDPath,
-		AccountPrefix: chain.AddressPrefix,
-	}
-
-	if chain.HasFaucet {
-		cfg.FaucetName = fmt.Sprintf("%s-faucet", cfg.NodesetName)
-	}
-
-	relayerConfig, err := operator.BuildRelayer(cfg)
-	if err != nil {
-		return err
-	}
-
-	relayer, err := q.Relayer()
-	if err != nil && !errors.Is(err, k8s.ErrNotFound) {
-		return fmt.Errorf("cannot query relayer, %w", err)
-	}
-
-	relayerWasEmpty := len(relayer.Spec.Chains) == 0
-
-	for _, existingChain := range relayer.Spec.Chains {
-		if existingChain.Nodeset == relayerConfig.Nodeset {
-			return nil // existing chain, somehow...
-		}
-	}
-
-	gasPrice := fmt.Sprintf("%.2f", relayerDenom.GasPriceLevels.Average)
-
-	relayerConfig.GasPrice = v1.GasPriceConfig{
-		Price: &gasPrice,
-		Denom: &relayerDenom.Name,
-	}
-	relayerConfig.MaxGas = &maxGas
-
-	relayerConfig.MaxMsgNum = &chain.RelayerConfiguration.MaxMsgNum
-	relayerConfig.MaxGas = &chain.RelayerConfiguration.MaxGas
-	relayerConfig.ClockDrift = &chain.RelayerConfiguration.ClockDrift
-	relayerConfig.TrustingPeriod = &chain.RelayerConfiguration.TrustingPeriod
-
-	relayer.Spec.Chains = append(relayer.Spec.Chains, &relayerConfig)
-
-	if !chain.SkipChannelCreation {
-		// if we don't want to skip channel creation, always create new paths
-		ctc, alreadyConnected, err := i.chainsConnectedAndToConnectTo(cfg.NodesetName, true)
-		if err != nil {
-			i.l.Debugw("cannot query chains to connect to", "error", err)
-			return err
-		}
-
-		i.l.Debugw("chains to connect to", "ctc", ctc)
-		i.l.Debugw("chains already connected", "chains", alreadyConnected, "how many", len(alreadyConnected))
-
-		if len(alreadyConnected) != 0 {
-			if err := i.updateAlreadyConnected(alreadyConnected); err != nil {
-				i.l.Debugw("cannot update already connected chains", "error", err)
-				return err
-			}
-		}
-
-		for _, ccc := range ctc {
-			newPath := v1.PathConfig{
-				SideA: cfg.NodesetName,
-				SideB: ccc,
-			}
-
-			if pathDuplicate(newPath, relayer.Spec.Paths) {
-				continue
-			}
-
-			relayer.Spec.Paths = append(relayer.Spec.Paths, newPath)
-		}
-	} else {
-		i.l.Debugw("skipping channel creation", "chainName", cfg.NodesetName)
-	}
-
-	var execErr error
-	if errors.Is(err, k8s.ErrNotFound) || relayerWasEmpty {
-		i.l.Debugw("creating new relayer instance", "debugMode", i.relayerDebug)
-		relayer.Namespace = i.defaultNamespace
-		relayer.Name = "relayer"
-		relayer.ObjectMeta.Name = "relayer"
-		relayer.Spec.Filter = true
-		relayer.Spec.ClearPacketsInterval = &clearPacketsInterval
-
-		if i.relayerDebug {
-			relayer.Spec.LogLevel = &relayerDebugLogLevel
-		}
-
-		execErr = q.AddRelayer(relayer)
-	} else {
-		i.l.Debugw("relayer configuration existing", "configuration", relayer)
-
-		if i.relayerDebug {
-			relayer.Spec.LogLevel = &relayerDebugLogLevel
-		}
-
-		execErr = q.UpdateRelayer(relayer)
-	}
-
-	if execErr != nil {
-		return fmt.Errorf("cannot update or add relayer, %w", execErr)
-	}
-
-	return nil
-}
-
-func pathDuplicate(newConfig v1.PathConfig, paths []v1.PathConfig) bool {
-	flipped := v1.PathConfig{
-		SideA: newConfig.SideB,
-		SideB: newConfig.SideA,
-	}
-
-	for _, path := range paths {
-		if path == newConfig || path == flipped {
-			return true
-		}
-	}
-
-	return false
-}
-
 func (i *Instance) relayerFinished(chain Chain, relayer v1.Relayer) error {
 	if err := i.setPrimaryChannel(chain, relayer); err != nil {
 		return err
-	}
-
-	return nil
-}
-
-type connectedChain struct {
-	chainName        string
-	counterChainName string
-	channel          string
-	counterChannel   string
-}
-
-func (c connectedChain) String() string {
-	return fmt.Sprintf("%s, %s, %s, %s", c.chainName, c.counterChainName, c.channel, c.counterChannel)
-}
-
-func (i *Instance) chainsConnectedAndToConnectTo(chainName string, alwaysConnect bool) ([]string, []connectedChain, error) {
-	sourceChain, err := i.db.Chain(chainName)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	chains, err := i.db.Chains()
-	if err != nil {
-		return nil, nil, err
-	}
-
-	var ret []string
-	var connected []connectedChain
-
-	for _, c := range chains {
-		if c.ChainName == chainName {
-			continue
-		}
-
-		i.l.Debugw("querying channels between chains", "chainName", chainName, "destination", c.ChainName, "chainID", sourceChain.NodeInfo.ChainID)
-		conns, err := i.db.ChannelsBetweenChains(chainName, c.ChainName, sourceChain.NodeInfo.ChainID)
-		if err != nil {
-			return nil, nil, fmt.Errorf("cannot scan channels between chain %s and %s, %w", chainName, c.ChainName, err)
-		}
-
-		i.l.Debugw("chains between", "chainName", chainName, "other", c.ChainName, "conns", conns)
-
-		if len(conns) == 0 || alwaysConnect {
-			ret = append(ret, c.ChainName) // c.ChainName is not connected to chainName, or alwaysConnect is true
-		} else {
-			cc := connectedChain{
-				chainName:        chainName,
-				counterChainName: c.ChainName,
-			}
-
-			for counterChanID, chanID := range conns {
-				cc.channel = chanID
-				cc.counterChannel = counterChanID
-				break
-			}
-
-			i.l.Debugw("new connected chain", "chain", cc)
-
-			connected = append(connected, cc) // c.ChainName is connected via cc.counterChannel, chainName is connected via cc.channel
-		}
-	}
-
-	i.l.Debugw("returning data from chains connected func", "ret", ret, "connected", connected)
-
-	return ret, connected, nil
-}
-
-func (i *Instance) updateAlreadyConnected(connected []connectedChain) error {
-	chains, err := i.db.Chains()
-	if err != nil {
-		return err
-	}
-
-	chainsMap := map[string]models.Chain{}
-	for _, c := range chains {
-		chainsMap[c.ChainName] = c
-	}
-
-	for _, c := range connected {
-		chain, ok := chainsMap[c.chainName]
-		if !ok {
-			return fmt.Errorf("found chain %s in connectedChain but not into chains database", c.chainName)
-		}
-
-		counterChain, ok := chainsMap[c.counterChainName]
-		if !ok {
-			return fmt.Errorf("found counterparty chain %s in connectedChain but not into chains database", c.counterChainName)
-		}
-
-		chain.PrimaryChannel[c.counterChainName] = c.counterChannel
-		counterChain.PrimaryChannel[c.chainName] = c.channel
-
-		if err := i.db.AddChain(chain); err != nil {
-			return fmt.Errorf("error while updating chain %s, %w", chain.ChainName, err)
-		}
-
-		if err := i.db.AddChain(counterChain); err != nil {
-			return fmt.Errorf("error while updating chain %s, %w", counterChain.ChainName, err)
-		}
 	}
 
 	return nil
@@ -492,13 +237,4 @@ func (i *Instance) updatePrimaryChannelForChain(chainsMap map[string]models.Chai
 	}
 
 	return chainsMap
-}
-
-func (i *Instance) relayerDenom(chainName string) (models.Denom, error) {
-	chain, err := i.db.Chain(chainName)
-	if err != nil {
-		return models.Denom{}, err
-	}
-
-	return chain.RelayerToken(), nil
 }

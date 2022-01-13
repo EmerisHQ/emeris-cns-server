@@ -1,19 +1,18 @@
 package rest
 
 import (
+	"database/sql"
 	"errors"
 	"net/http"
 
 	"github.com/allinbits/demeris-backend-models/validation"
 
-	"github.com/allinbits/emeris-utils/k8s"
-
 	"github.com/gin-gonic/gin"
 )
 
-const deleteChainRoute = "/delete"
+const DeleteChainRoute = "/delete"
 
-type deleteChainRequest struct {
+type DeleteChainRequest struct {
 	Chain string `json:"chain" binding:"required"`
 }
 
@@ -25,9 +24,10 @@ type deleteChainRequest struct {
 // @Produce json
 // @Success 200
 // @Failure 400 "if cannot parse payload"
+// @Failure 404 "if unknown chain name"
 // @Failure 500
 func (r *router) deleteChainHandler(ctx *gin.Context) {
-	chain := deleteChainRequest{}
+	chain := DeleteChainRequest{}
 
 	if err := ctx.ShouldBindJSON(&chain); err != nil {
 		e(ctx, http.StatusBadRequest, validation.MissingFieldsErr(err, false))
@@ -35,15 +35,15 @@ func (r *router) deleteChainHandler(ctx *gin.Context) {
 		return
 	}
 
-	k := k8s.Querier{Client: *r.s.KubeClient, Namespace: r.s.Config.KubernetesNamespace}
+	_, err := r.s.DB.Chain(chain.Chain)
 
-	if err := k.DeleteNode(chain.Chain); err != nil {
-		// there isn't always a k8s nodeset for a given chain
-		if !errors.Is(err, k8s.ErrNotFound) {
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			e(ctx, http.StatusNotFound, err)
+		} else {
 			e(ctx, http.StatusInternalServerError, err)
-			r.s.l.Error("cannot delete chain", err)
-			return
 		}
+		return
 	}
 
 	if err := r.s.DB.DeleteChain(chain.Chain); err != nil {

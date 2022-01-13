@@ -86,7 +86,7 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 	g.POST(AddChainRoute, ac.AuthUser(), r.addChainHandler)
 	g.POST(updatePrimaryChannelRoute, ac.AuthUser(), r.updatePrimaryChannelHandler)
 	g.POST(updateDenomsRoute, ac.AuthUser(), r.updateDenomsHandler)
-	g.DELETE(deleteChainRoute, ac.AuthUser(), r.deleteChainHandler)
+	g.DELETE(DeleteChainRoute, ac.AuthUser(), r.deleteChainHandler)
 
 	g.NoRoute(func(context *gin.Context) {
 		e(context, http.StatusNotFound, errors.New("not found"))

@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -11,7 +10,6 @@ import (
 	models "github.com/allinbits/demeris-backend-models/cns"
 	"github.com/allinbits/demeris-backend-models/validation"
 	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
-	"github.com/allinbits/emeris-utils/k8s"
 	"github.com/allinbits/emeris-utils/k8s/operator"
 	v1 "github.com/allinbits/starport-operator/api/v1"
 )
@@ -58,16 +56,6 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 		e(ctx, http.StatusBadRequest, err)
 		r.s.l.Error("fee validation failed", err)
 		return
-	}
-
-	k := k8s.Querier{
-		Client:    *r.s.KubeClient,
-		Namespace: r.s.Config.KubernetesNamespace,
-	}
-
-	if _, err := k.ChainByName(newChain.ChainName); !errors.Is(err, k8s.ErrNotFound) {
-		r.s.l.Infow("trying to add a kubernetes nodeset which is already there, ignoring", "error", err)
-		newChain.NodeConfig = nil
 	}
 
 	if newChain.NodeConfig != nil {
@@ -135,14 +123,6 @@ func (r *router) addChainHandler(ctx *gin.Context) {
 		}); err != nil {
 			e(ctx, http.StatusInternalServerError, err)
 			r.s.l.Error("cannot add chain name to cache", err)
-			return
-		}
-
-		r.s.l.Debugw("node config", "config", node)
-
-		if err := k.AddNode(*node); err != nil {
-			e(ctx, http.StatusInternalServerError, err)
-			r.s.l.Error("cannot add chain", err)
 			return
 		}
 	}

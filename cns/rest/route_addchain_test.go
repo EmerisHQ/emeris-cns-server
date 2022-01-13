@@ -22,7 +22,6 @@ import (
 func TestAddChain(t *testing.T) {
 
 	setupMockK8sClient()
-	// setupMockAuthClient()
 
 	tests := []struct {
 		name             string
@@ -117,43 +116,3 @@ func setupMockK8sClient() {
 		mock.Anything, // client.ObjectList
 	).Return(func(context.Context, client.Object, ...client.CreateOption) error { return nil })
 }
-
-// func setupMockAuthClient() {
-// 	authClient := *testingCtx.server.AuthClient
-
-// 	authClient = authClient.(*mocks.AuthClient)
-
-// 	// authClient.(*mocks.AuthClient).On("AuthUser").Return(func() gin.HandlerFunc {
-// 	// 	return func(ctx *gin.Context) {
-// 	// 		auth := middleware.AuthHeader{}
-
-// 	// 		if err := ctx.ShouldBindHeader(&auth); err != nil {
-// 	// 			jsonErr := middleware.AuthError{
-// 	// 				Error: err.Error(),
-// 	// 			}
-
-// 	// 			_ = ctx.Error(err)
-// 	// 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, jsonErr)
-// 	// 			return
-// 	// 		}
-
-// 	// 		jwtTokenHeader := strings.Split(auth.Token, "JWT ")
-
-// 	// 		if len(jwtTokenHeader) != 2 {
-
-// 	// 			err := fmt.Errorf("invalid auth token")
-
-// 	// 			jsonErr := middleware.AuthError{
-// 	// 				Error: err.Error(),
-// 	// 			}
-
-// 	// 			_ = ctx.Error(err)
-// 	// 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, jsonErr)
-// 	// 			return
-// 	// 		}
-
-// 	// 		ctx.Next()
-// 	// 	}
-// 	// })
-
-// }
