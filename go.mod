@@ -23,7 +23,7 @@ require (
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/spf13/viper v1.10.1 // indirect
 	github.com/stretchr/testify v1.7.1-0.20210427113832-6241f9ab9942
-	go.uber.org/zap v1.17.0
+	go.uber.org/zap v1.20.0
 	google.golang.org/grpc v1.43.0
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
@@ -32,7 +32,7 @@ require (
 )
 
 require (
-	github.com/alicebob/miniredis/v2 v2.16.0
+	github.com/alicebob/miniredis/v2 v2.18.0
 	github.com/allinbits/demeris-backend-models v0.0.0-20220107002424-f5d0bdc96bb4
 	github.com/google/go-cmp v0.5.6
 	github.com/swaggo/swag v1.7.4
