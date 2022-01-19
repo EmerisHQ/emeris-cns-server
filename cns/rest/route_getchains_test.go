@@ -44,7 +44,6 @@ func TestGetChains(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
 
 			// if we have a populated Chain store it
 			if len(tt.dataStructs) > 0 {
