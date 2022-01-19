@@ -32,7 +32,7 @@ require (
 )
 
 require (
-	github.com/alicebob/miniredis/v2 v2.16.0
+	github.com/alicebob/miniredis/v2 v2.18.0
 	github.com/allinbits/demeris-backend-models v0.0.0-20220107002424-f5d0bdc96bb4
 	github.com/google/go-cmp v0.5.6
 	github.com/swaggo/swag v1.7.4
