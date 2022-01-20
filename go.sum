@@ -162,10 +162,10 @@ github.com/alicebob/miniredis/v2 v2.16.0/go.mod h1:gquAfGbzn92jvtrSC69+6zZnwSODV
 github.com/alicebob/miniredis/v2 v2.18.0 h1:EPUGD69ou4Uw4c81t9NLh0+dSou46k4tFEvf498FJ0g=
 github.com/alicebob/miniredis/v2 v2.18.0/go.mod h1:gquAfGbzn92jvtrSC69+6zZnwSODVXVpYDRaGhWaL6I=
 github.com/allegro/bigcache v1.2.1-0.20190218064605-e24eb225f156/go.mod h1:Cb/ax3seSYIx7SuZdm2G2xzfwmv3TPSk2ucNfQESPXM=
-github.com/allinbits/demeris-backend-models v0.0.0-20220107002424-f5d0bdc96bb4 h1:Y78cfLuBZLar/4iJmI5fcnfvkgTUvsNNBf1+lp8qEZE=
-github.com/allinbits/demeris-backend-models v0.0.0-20220107002424-f5d0bdc96bb4/go.mod h1:KF3guzQFY/P09uH9WY0AkUdRpN9kbHdCHSavm4ehMZE=
-github.com/allinbits/emeris-utils v0.0.0-20220111144137-74da43e7bb11 h1:057ekDu1cke6wfy0H4o0e/52VF24CAyyTwLuZEBJqt4=
-github.com/allinbits/emeris-utils v0.0.0-20220111144137-74da43e7bb11/go.mod h1:/4J2hcesLBELMRd2nISKVynPEa061ao2QUwEbzdPcDk=
+github.com/allinbits/demeris-backend-models v0.1.0 h1:rlfYTtvVtX/zZgXKQTEkpt2F1R1f6tT0NXk8dEL+AZc=
+github.com/allinbits/demeris-backend-models v0.1.0/go.mod h1:KF3guzQFY/P09uH9WY0AkUdRpN9kbHdCHSavm4ehMZE=
+github.com/allinbits/emeris-utils v0.1.0 h1:MsAh9d3IMMDeUgA23iZDbafT3Mnaly70xiKOqQyP85s=
+github.com/allinbits/emeris-utils v0.1.0/go.mod h1:/4J2hcesLBELMRd2nISKVynPEa061ao2QUwEbzdPcDk=
 github.com/allinbits/starport-operator v0.0.1-alpha.45 h1:peplm7s6mXPhi9bd7qxC3CLgu1m1wRNRcrsYQZMiqAQ=
 github.com/allinbits/starport-operator v0.0.1-alpha.45/go.mod h1:8KNM5J00CtUCwjlnvMY/YpTbXBqHj04ER+SXi8PAWRI=
 github.com/andrew-d/go-termutil v0.0.0-20150726205930-009166a695a2/go.mod h1:jnzFpU88PccN/tPPhCpnNU8mZphvKxYM9lLNkd8e+os=
