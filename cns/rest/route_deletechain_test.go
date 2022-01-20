@@ -17,7 +17,6 @@ import (
 
 // Test deleting a Chain
 func TestDeleteChain(t *testing.T) {
-	t.Parallel()
 
 	tests := []struct {
 		name             string
