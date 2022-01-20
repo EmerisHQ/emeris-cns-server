@@ -63,8 +63,8 @@ cloud.google.com/go/storage v1.10.0/go.mod h1:FLPqc6j+Ki4BU591ie1oL6qBQGu2Bl/tZ9
 collectd.org v0.3.0/go.mod h1:A/8DzQBkF6abtvrT2j/AU/4tiBgJWYyh0y/oB/4MlWE=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 emperror.dev/errors v0.8.0/go.mod h1:YcRvLPh626Ubn2xqtoprejnA5nFha+TJ+2vew48kWuE=
-firebase.google.com/go/v4 v4.7.0 h1:c9bz0AtNJv30I+VJJWgzlGFeu/9PW1j1w6OHd+zNZJc=
-firebase.google.com/go/v4 v4.7.0/go.mod h1:UgGSTOhEZVbB2L3dQ3z4pThDTiH869i8TDAZKnrHKbU=
+firebase.google.com/go/v4 v4.7.1 h1:ZtyJU6zpl7Dv5tvzDmJZZljKT6TRShzoNnOAdKNK9DE=
+firebase.google.com/go/v4 v4.7.1/go.mod h1:UgGSTOhEZVbB2L3dQ3z4pThDTiH869i8TDAZKnrHKbU=
 github.com/99designs/keyring v1.1.6 h1:kVDC2uCgVwecxCk+9zoCt2uEL6dt+dfVzMvGgnVcIuM=
 github.com/99designs/keyring v1.1.6/go.mod h1:16e0ds7LGQQcT59QqkTg72Hh5ShM51Byv5PEmW6uoRU=
 github.com/AlecAivazis/survey/v2 v2.1.1/go.mod h1:9FJRdMdDm8rnT+zHVbvQT2RTSTLq0Ttd6q3Vl2fahjk=

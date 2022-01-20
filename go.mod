@@ -42,7 +42,7 @@ require (
 require github.com/allinbits/emeris-utils v0.1.0
 
 require (
-	firebase.google.com/go/v4 v4.7.0
+	firebase.google.com/go/v4 v4.7.1
 	google.golang.org/api v0.65.0
 )
 
