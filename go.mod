@@ -33,7 +33,7 @@ require (
 
 require (
 	github.com/alicebob/miniredis/v2 v2.18.0
-	github.com/allinbits/demeris-backend-models v0.1.0
+	github.com/allinbits/demeris-backend-models v1.0.0
 	github.com/google/go-cmp v0.5.6
 	github.com/swaggo/swag v1.7.4
 	github.com/tendermint/tendermint v0.34.11
@@ -82,7 +82,7 @@ require (
 	github.com/dustin/go-humanize v1.0.1-0.20200219035652-afde56e7acac // indirect
 	github.com/dvsekhvalnov/jose2go v0.0.0-20200901110807-248326c1351b // indirect
 	github.com/enigmampc/btcutil v1.0.3-0.20200723161021-e2fb6adb2a25 // indirect
-	github.com/ethereum/go-ethereum v1.10.13 // indirect
+	github.com/ethereum/go-ethereum v1.10.15 // indirect
 	github.com/evanphx/json-patch v4.11.0+incompatible // indirect
 	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
