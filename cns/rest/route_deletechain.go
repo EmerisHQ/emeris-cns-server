@@ -19,7 +19,7 @@ type DeleteChainRequest struct {
 // @Summary Delete a chain's configuration
 // @Description Delete a chain identified by name
 // @Router /delete [delete]
-// @Param chain body deleteChainRequest true "Chain name to delete"
+// @Param chain body DeleteChainRequest true "Chain name to delete"
 // @Accept json
 // @Produce json
 // @Success 200

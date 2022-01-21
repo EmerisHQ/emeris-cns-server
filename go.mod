@@ -33,7 +33,7 @@ require (
 
 require (
 	github.com/alicebob/miniredis/v2 v2.18.0
-	github.com/allinbits/demeris-backend-models v1.0.0
+	github.com/allinbits/demeris-backend-models v1.0.1
 	github.com/google/go-cmp v0.5.6
 	github.com/swaggo/swag v1.7.4
 	github.com/tendermint/tendermint v0.34.11
