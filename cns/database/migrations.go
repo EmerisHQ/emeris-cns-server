@@ -176,6 +176,17 @@ ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS public_node_endpoints jsonb DEFA
 const addColumnCosmosSDKVersion = `
 ALTER TABLE cns.chains ADD COLUMN IF NOT EXISTS cosmos_sdk_version string DEFAULT 'v0.42.10';
 `
+const updateTendermintRPCEndpoints = `
+UPDATE cns.chains 
+SET public_node_endpoints = json_set(public_node_endpoints, '{tendermint_rpc}'::string[],json_build_array(public_node_endpoints->'tendermint_rpc')) 
+WHERE public_node_endpoints::jsonb ? 'tendermint_rpc' and json_typeof(public_node_endpoints->'tendermint_rpc') = 'string';
+`
+
+const updateCosmosAPIEndpoints = `
+UPDATE cns.chains 
+SET public_node_endpoints = json_set(public_node_endpoints, '{cosmos_api}'::string[],json_build_array(public_node_endpoints->'cosmos_api')) 
+WHERE public_node_endpoints::jsonb ? 'cosmos_api' and json_typeof(public_node_endpoints->'cosmos_api') = 'string';
+`
 
 var migrationList = []string{
 	createDatabase,
@@ -184,6 +195,8 @@ var migrationList = []string{
 	addColumnBlockExplorer,
 	addColumnPublicNodeEndpoints,
 	addColumnCosmosSDKVersion,
+	updateTendermintRPCEndpoints,
+	updateCosmosAPIEndpoints,
 }
 
 func (i *Instance) runMigrations() {
