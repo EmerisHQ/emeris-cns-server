@@ -39,7 +39,7 @@ require (
 	github.com/tendermint/tendermint v0.34.11
 )
 
-require github.com/allinbits/emeris-utils v0.1.0
+require github.com/allinbits/emeris-utils v1.0.0
 
 require (
 	firebase.google.com/go/v4 v4.7.0
