@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/allinbits/emeris-cns-server/cns/config"
-	"github.com/allinbits/emeris-cns-server/cns/middleware"
 
 	"github.com/allinbits/demeris-backend-models/validation"
 	"github.com/gin-gonic/gin/binding"
@@ -29,14 +28,13 @@ type Server struct {
 	KubeClient *kube.Client
 	rc         *chainwatch.Connection
 	Config     *config.Config
-	AuthClient *middleware.AuthClient
 }
 
 type router struct {
 	s *Server
 }
 
-func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc *chainwatch.Connection, config *config.Config, authClient middleware.AuthClient) *Server {
+func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc *chainwatch.Connection, config *config.Config) *Server {
 	if !config.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -50,7 +48,6 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 		KubeClient: &kube,
 		rc:         rc,
 		Config:     config,
-		AuthClient: &authClient,
 	}
 
 	r := &router{s: s}
@@ -78,15 +75,20 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 		c.Next()
 	})
 
-	ac := *r.s.AuthClient
+	// auth endpoints
+
+	g.GET("/auth/user", r.Auth(), r.User)
+	g.POST("/auth/login", r.Login)
+
+	// cns endpoints
 
 	g.GET(r.getChain())
 	g.GET(r.getChains())
 	g.GET(r.denomsData())
-	g.POST(AddChainRoute, ac.AuthUser(), r.addChainHandler)
-	g.POST(updatePrimaryChannelRoute, ac.AuthUser(), r.updatePrimaryChannelHandler)
-	g.POST(updateDenomsRoute, ac.AuthUser(), r.updateDenomsHandler)
-	g.DELETE(DeleteChainRoute, ac.AuthUser(), r.deleteChainHandler)
+	g.POST(AddChainRoute, r.Auth(), r.addChainHandler)
+	g.POST(updatePrimaryChannelRoute, r.Auth(), r.updatePrimaryChannelHandler)
+	g.POST(updateDenomsRoute, r.Auth(), r.updateDenomsHandler)
+	g.DELETE(DeleteChainRoute, r.Auth(), r.deleteChainHandler)
 
 	g.NoRoute(func(context *gin.Context) {
 		e(context, http.StatusNotFound, errors.New("not found"))
