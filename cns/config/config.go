@@ -17,6 +17,7 @@ type Config struct {
 	RESTAddress           string `validate:"required"`
 	Debug                 bool
 	RelayerDebug          bool
+	Env                   string `validate:"required"`
 }
 
 func (c Config) Validate() error {
@@ -37,5 +38,6 @@ func ReadConfig() (*Config, error) {
 		"RESTAddress":         ":9999",
 		"KubernetesNamespace": "emeris",
 		"RelayerDebug":        "true",
+		"Env":                 "local",
 	})
 }
