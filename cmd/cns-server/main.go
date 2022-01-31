@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/allinbits/emeris-cns-server/cns/auth"
 	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
 	"github.com/allinbits/emeris-cns-server/cns/config"
 	"github.com/allinbits/emeris-cns-server/cns/database"
-	"github.com/allinbits/emeris-cns-server/cns/middleware"
 	"github.com/allinbits/emeris-cns-server/cns/rest"
 	"github.com/allinbits/emeris-utils/k8s"
 	"github.com/allinbits/emeris-utils/logging"
@@ -40,7 +40,7 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	a, err := middleware.NewAuthClient()
+	err = auth.NewOAuthServer(config.Env)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -62,7 +62,6 @@ func main() {
 		kube,
 		rc,
 		config,
-		a,
 	)
 
 	if err := restServer.Serve(config.RESTAddress); err != nil {
