@@ -17,48 +17,48 @@ func (r *router) Auth() gin.HandlerFunc {
 			ctx.Set("email", "tester@tendermint.com")
 			ctx.Set("name", "Test Ickle")
 			ctx.Next()
-		} else {
-			if cookie, err := ctx.Request.Cookie("auth._token.google"); err == nil {
+		}
 
-				reqTokenEncoded := cookie.Value
+		if cookie, err := ctx.Request.Cookie("auth._token.google"); err == nil {
 
-				reqToken, err := url.PathUnescape(reqTokenEncoded)
+			reqTokenEncoded := cookie.Value
 
-				if err != nil {
-					e(ctx, http.StatusUnauthorized, err)
-					r.s.l.Error("error unescaping token", err)
-					return
-				}
+			reqToken, err := url.PathUnescape(reqTokenEncoded)
 
-				splitToken := strings.Split(reqToken, " ")
-
-				if len(splitToken) != 2 {
-					e(ctx, http.StatusUnauthorized, errors.New("invalid token"))
-					r.s.l.Error("invalid token")
-					return
-				}
-
-				reqToken = splitToken[1]
-				claims, err := r.s.a.ParseJWT(reqToken)
-
-				if err != nil {
-					e(ctx, http.StatusUnauthorized, err)
-					r.s.l.Error("failed to verify token", err)
-					return
-				}
-
-				email := claims["email"].(string)
-				name := claims["name"].(string)
-				ctx.Set("email", email)
-				ctx.Set("name", name)
-
-				r.s.l.Infow("incoming request from %s (%s)\n", name, email)
-				ctx.Next()
-			} else {
+			if err != nil {
 				e(ctx, http.StatusUnauthorized, err)
-				r.s.l.Error("token not found")
+				r.s.l.Error("error unescaping token", err)
 				return
 			}
+
+			splitToken := strings.Split(reqToken, " ")
+
+			if len(splitToken) != 2 {
+				e(ctx, http.StatusUnauthorized, errors.New("invalid token"))
+				r.s.l.Error("invalid token")
+				return
+			}
+
+			reqToken = splitToken[1]
+			claims, err := r.s.a.ParseJWT(reqToken)
+
+			if err != nil {
+				e(ctx, http.StatusUnauthorized, err)
+				r.s.l.Error("failed to verify token", err)
+				return
+			}
+
+			email := claims["email"].(string)
+			name := claims["name"].(string)
+			ctx.Set("email", email)
+			ctx.Set("name", name)
+
+			r.s.l.Infow("incoming request from %s (%s)\n", name, email)
+			ctx.Next()
+		} else {
+			e(ctx, http.StatusUnauthorized, err)
+			r.s.l.Error("token not found")
+			return
 		}
 	}
 }
