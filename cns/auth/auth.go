@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"path"
+	"strings"
 	"time"
 
 	goauth "google.golang.org/api/oauth2/v2"
@@ -15,12 +16,16 @@ import (
 	"google.golang.org/api/option"
 )
 
-var conf *oauth2.Config
-var secret = []byte("asmiogu;bvzx9vharGDSOJVAG$QY(gadfovzopRASDgfzu^!@^jba90j0awtS{DGa")
+type OAServer struct {
+	conf   *oauth2.Config
+	secret []byte
+	Env    string
+}
 
 var domains = map[string]string{
-	"local":   "http://0.0.0.0:8000/",
-	"develop": "https://develop--emeris-admin.netlify.app/",
+	"test":    "http://127.0.0.1:8000/",
+	"local":   "http://127.0.0.1:8000/",
+	"dev":     "https://develop--emeris-admin.netlify.app/",
 	"staging": "https://staging--emeris-admin.netlify.app/",
 	"prod":    "https://admin.emeris.com/",
 }
@@ -41,14 +46,14 @@ func getRedirectUrl(env string) (string, error) {
 	}
 }
 
-func NewOAuthServer(env string) error {
+func NewOAuthServer(env string, secret []byte) (*OAServer, error) {
 	url, err := getRedirectUrl(env)
 
 	if err != nil {
-		return err
+		return &OAServer{}, err
 	}
 
-	conf = &oauth2.Config{
+	conf := &oauth2.Config{
 		ClientID:     "456830583626-ovlsdesepg4t2g1ufk2nse0b1tbm31pc.apps.googleusercontent.com",
 		ClientSecret: "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",
 		RedirectURL:  url,
@@ -58,20 +63,24 @@ func NewOAuthServer(env string) error {
 		Endpoint: google.Endpoint,
 	}
 
-	return nil
+	return &OAServer{
+		conf:   conf,
+		secret: secret,
+		Env:    strings.ToLower(env),
+	}, nil
 }
 
-func Exchange(code string) (*oauth2.Token, error) {
-	token, err := conf.Exchange(context.Background(), code, oauth2.AccessTypeOffline)
+func (s *OAServer) Exchange(code string) (*oauth2.Token, error) {
+	token, err := s.conf.Exchange(context.Background(), code, oauth2.AccessTypeOffline)
 	return token, err
 }
 
-func NewService(token *oauth2.Token) (*goauth.Service, error) {
-	svc, err := goauth.NewService(context.Background(), option.WithTokenSource(conf.TokenSource(context.Background(), token)))
+func (s *OAServer) NewService(token *oauth2.Token) (*goauth.Service, error) {
+	svc, err := goauth.NewService(context.Background(), option.WithTokenSource(s.conf.TokenSource(context.Background(), token)))
 	return svc, err
 }
 
-func SignJWTs(userInfo *goauth.Userinfo, code string) (string, string, error) {
+func (s *OAServer) SignJWTs(userInfo *goauth.Userinfo, code string) (string, string, error) {
 	authToken := jwt.New(jwt.SigningMethodHS256)
 
 	authClaims := authToken.Claims.(jwt.MapClaims)
@@ -83,7 +92,7 @@ func SignJWTs(userInfo *goauth.Userinfo, code string) (string, string, error) {
 	authClaims["user"] = userInfo
 	authClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
 
-	authTokenString, err := authToken.SignedString(secret)
+	authTokenString, err := authToken.SignedString(s.secret)
 
 	if err != nil {
 		return "", "", err
@@ -97,7 +106,7 @@ func SignJWTs(userInfo *goauth.Userinfo, code string) (string, string, error) {
 	refreshClaims["refresh_uuid"] = userInfo.Name
 	refreshClaims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
-	refreshTokenString, err := refreshToken.SignedString(secret)
+	refreshTokenString, err := refreshToken.SignedString(s.secret)
 
 	if err != nil {
 		return "", "", err
@@ -106,11 +115,11 @@ func SignJWTs(userInfo *goauth.Userinfo, code string) (string, string, error) {
 	return authTokenString, refreshTokenString, nil
 }
 
-func ParseJWT(token string) (jwt.MapClaims, error) {
+func (s *OAServer) ParseJWT(token string) (jwt.MapClaims, error) {
 	claims := jwt.MapClaims{}
 
 	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-		return secret, nil
+		return s.secret, nil
 	})
 
 	if err != nil {

@@ -40,7 +40,7 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	err = auth.NewOAuthServer(config.Env)
+	a, err := auth.NewOAuthServer(config.Env, []byte(config.Secret))
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -62,6 +62,7 @@ func main() {
 		kube,
 		rc,
 		config,
+		a,
 	)
 
 	if err := restServer.Serve(config.RESTAddress); err != nil {

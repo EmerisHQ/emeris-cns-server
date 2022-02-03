@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/allinbits/emeris-cns-server/cns/auth"
 	"github.com/allinbits/emeris-cns-server/cns/config"
 
 	"github.com/allinbits/demeris-backend-models/validation"
@@ -28,13 +29,14 @@ type Server struct {
 	KubeClient *kube.Client
 	rc         *chainwatch.Connection
 	Config     *config.Config
+	a          *auth.OAServer
 }
 
 type router struct {
 	s *Server
 }
 
-func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc *chainwatch.Connection, config *config.Config) *Server {
+func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc *chainwatch.Connection, config *config.Config, a *auth.OAServer) *Server {
 	if !config.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -48,6 +50,7 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 		KubeClient: &kube,
 		rc:         rc,
 		Config:     config,
+		a:          a,
 	}
 
 	r := &router{s: s}
@@ -60,6 +63,14 @@ func NewServer(l *zap.SugaredLogger, d *database.Instance, kube kube.Client, rc 
 	g.Use(logging.LogRequest(l.Desugar()))
 	g.Use(ginzap.RecoveryWithZap(l.Desugar(), true))
 
+	// g.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     []string{"http://localhost:8000", "http://localhost", "http://127.0.0.1", "http://127.0.0.1:8000"},
+	// 	AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+	// 	AllowHeaders:     []string{"Authorization"},
+	// 	ExposeHeaders:    []string{"Access-Control-Allow-Origin"},
+	// 	AllowCredentials: true,
+	// 	MaxAge:           12 * time.Hour,
+	// }))
 	g.Use(func(c *gin.Context) {
 
 		c.Header("Access-Control-Allow-Origin", "*")
