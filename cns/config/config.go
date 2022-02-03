@@ -19,6 +19,9 @@ type Config struct {
 	RelayerDebug          bool
 	Env                   string `validate:"required"`
 	Secret                string `validate:"required"`
+	RedirectURL           string `validate:"required"`
+	OAuth2ClientID        string `validate:"required"`
+	OAuth2ClientSecret    string `validate:"required"`
 }
 
 func (c Config) Validate() error {
