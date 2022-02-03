@@ -7,7 +7,6 @@ import (
 
 	goauth "google.golang.org/api/oauth2/v2"
 
-	"github.com/allinbits/emeris-cns-server/cns/auth"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,7 +26,7 @@ func (r *router) Login(ctx *gin.Context) {
 		return
 	}
 
-	token, err := auth.Exchange(ctx.Request.PostFormValue("code"))
+	token, err := r.s.a.Exchange(ctx.Request.PostFormValue("code"))
 
 	if err != nil {
 		e(ctx, http.StatusBadRequest, err)
@@ -35,7 +34,7 @@ func (r *router) Login(ctx *gin.Context) {
 		return
 	}
 
-	oAuth2Service, err := auth.NewService(token)
+	oAuth2Service, err := r.s.a.NewService(token)
 
 	if err != nil {
 		e(ctx, http.StatusBadRequest, err)
@@ -56,7 +55,7 @@ func (r *router) Login(ctx *gin.Context) {
 		return
 	} else {
 
-		authTokenString, refreshTokenString, err := auth.SignJWTs(userInfo, ctx.Request.PostFormValue("code"))
+		authTokenString, refreshTokenString, err := r.s.a.SignJWTs(userInfo, ctx.Request.PostFormValue("code"))
 
 		if err != nil {
 			e(ctx, http.StatusBadRequest, err)

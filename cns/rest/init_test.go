@@ -9,6 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/allinbits/emeris-cns-server/cns/auth"
 	"github.com/allinbits/emeris-cns-server/cns/rest"
 
 	"github.com/alicebob/miniredis/v2"
@@ -75,7 +76,10 @@ func setup() (*rest.Server, *gin.Context, *httptest.ResponseRecorder, func()) {
 	kube := mocks.Client{}
 
 	// --- Auth Client mock ---
-	authClient := mocks.AuthClient{}
+	a, err := auth.NewOAuthServer("test", []byte("."))
+	if err != nil {
+		logger.Fatal(err)
+	}
 
 	// --- Chainwatch process ---
 	redisConnection, err := chainwatch.NewConnection(redisAddr)
@@ -111,7 +115,7 @@ func setup() (*rest.Server, *gin.Context, *httptest.ResponseRecorder, func()) {
 		&kube,
 		redisConnection,
 		conf,
-		&authClient,
+		a,
 	)
 
 	ch := make(chan struct{})
