@@ -32,7 +32,7 @@ var domains = map[string]string{
 
 func getRedirectUrl(env string) (string, error) {
 	if val, ok := domains[env]; !ok {
-		return "", error(fmt.Errorf("invalid environment"))
+		return "", fmt.Errorf("invalid environment")
 
 	} else {
 		u, err := url.Parse(val)
