@@ -30,7 +30,7 @@ func (r *router) Login(ctx *gin.Context) {
 
 	if err != nil {
 		e(ctx, http.StatusBadRequest, err)
-		r.s.l.Error("cannit verify code", err)
+		r.s.l.Error("cannot verify code", err)
 		return
 	}
 
