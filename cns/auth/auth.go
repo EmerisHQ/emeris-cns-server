@@ -22,6 +22,11 @@ type OAServer struct {
 	Env    string
 }
 
+type User struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
 var domains = map[string]string{
 	"test":    "http://127.0.0.1:8000/",
 	"local":   "http://127.0.0.1:8000/",
