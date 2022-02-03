@@ -18,6 +18,7 @@ type Config struct {
 	Debug                 bool
 	RelayerDebug          bool
 	Env                   string `validate:"required"`
+	Secret                string `validate:"required"`
 }
 
 func (c Config) Validate() error {
@@ -39,5 +40,6 @@ func ReadConfig() (*Config, error) {
 		"KubernetesNamespace": "emeris",
 		"RelayerDebug":        "true",
 		"Env":                 "local",
+		"Secret":              "asmiogu;bvzx9vharGDSOJVAG$QY(gadfovzopRASDgfzu^!@^jba90j0awtS{DGa",
 	})
 }
