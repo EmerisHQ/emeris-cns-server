@@ -76,7 +76,7 @@ func setup() (*rest.Server, *gin.Context, *httptest.ResponseRecorder, func()) {
 	kube := mocks.Client{}
 
 	// --- Auth Client mock ---
-	a, err := auth.NewOAuthServer("test", []byte("."))
+	a, err := auth.NewOAuthServer("test", "http://127.0.0.1:8000", "id", "secret", []byte("."))
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -108,6 +108,9 @@ func setup() (*rest.Server, *gin.Context, *httptest.ResponseRecorder, func()) {
 		LogPath:               "",
 		RelayerDebug:          true,
 		RESTAddress:           "127.0.0.1:" + port,
+		RedirectURL:           "http://127.0.0.1:8000",
+		OAuth2ClientID:        "not used but required",
+		OAuth2ClientSecret:    "not used but required",
 	}
 	server := rest.NewServer(
 		logger,
