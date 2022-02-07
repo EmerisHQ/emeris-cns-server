@@ -40,7 +40,7 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	a, err := auth.NewOAuthServer(config.Env, []byte(config.Secret))
+	a, err := auth.NewOAuthServer(config.Env, config.RedirectURL, config.OAuth2ClientID, config.OAuth2ClientSecret, []byte(config.Secret))
 	if err != nil {
 		logger.Fatal(err)
 	}

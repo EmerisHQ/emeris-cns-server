@@ -2,9 +2,6 @@ package auth
 
 import (
 	"context"
-	"fmt"
-	"net/url"
-	"path"
 	"strings"
 	"time"
 
@@ -27,41 +24,12 @@ type User struct {
 	Email string `json:"email"`
 }
 
-var domains = map[string]string{
-	"test":    "http://127.0.0.1:8000/",
-	"local":   "http://127.0.0.1:8000/",
-	"dev":     "https://develop--emeris-admin.netlify.app/",
-	"staging": "https://staging--emeris-admin.netlify.app/",
-	"prod":    "https://admin.emeris.com/",
-}
-
-func getRedirectUrl(env string) (string, error) {
-	if val, ok := domains[env]; !ok {
-		return "", fmt.Errorf("invalid environment")
-
-	} else {
-		u, err := url.Parse(val)
-		if err != nil {
-			return "", err
-		}
-		u.Path = path.Join(u.Path, "/admin/login")
-		s := u.String()
-
-		return s, nil
-	}
-}
-
-func NewOAuthServer(env string, secret []byte) (*OAServer, error) {
-	url, err := getRedirectUrl(env)
-
-	if err != nil {
-		return &OAServer{}, err
-	}
+func NewOAuthServer(env, redirectUrl, clientId, clientSecret string, secret []byte) (*OAServer, error) {
 
 	conf := &oauth2.Config{
-		ClientID:     "456830583626-ovlsdesepg4t2g1ufk2nse0b1tbm31pc.apps.googleusercontent.com",
-		ClientSecret: "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",
-		RedirectURL:  url,
+		ClientID:     clientId,
+		ClientSecret: clientSecret,
+		RedirectURL:  redirectUrl,
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.email",
 		},
@@ -96,7 +64,6 @@ func (s *OAServer) SignJWTs(userInfo *goauth.Userinfo, code string) (string, str
 	authClaims["name"] = userInfo.Name
 	authClaims["user"] = userInfo
 	authClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
-
 	authTokenString, err := authToken.SignedString(s.secret)
 
 	if err != nil {
@@ -112,7 +79,6 @@ func (s *OAServer) SignJWTs(userInfo *goauth.Userinfo, code string) (string, str
 	refreshClaims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
 	refreshTokenString, err := refreshToken.SignedString(s.secret)
-
 	if err != nil {
 		return "", "", err
 	}
@@ -126,7 +92,6 @@ func (s *OAServer) ParseJWT(token string) (jwt.MapClaims, error) {
 	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return s.secret, nil
 	})
-
 	if err != nil {
 		return nil, err
 	}
