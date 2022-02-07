@@ -19,7 +19,6 @@ type loginResponse struct {
 func (r *router) Login(ctx *gin.Context) {
 
 	err := ctx.Request.ParseForm()
-
 	if err != nil {
 		e(ctx, http.StatusBadRequest, err)
 		r.s.l.Error("failed to parse form", err)
@@ -27,7 +26,6 @@ func (r *router) Login(ctx *gin.Context) {
 	}
 
 	token, err := r.s.a.Exchange(ctx.Request.PostFormValue("code"))
-
 	if err != nil {
 		e(ctx, http.StatusBadRequest, err)
 		r.s.l.Error("cannot verify code", err)
@@ -35,7 +33,6 @@ func (r *router) Login(ctx *gin.Context) {
 	}
 
 	oAuth2Service, err := r.s.a.NewService(token)
-
 	if err != nil {
 		e(ctx, http.StatusBadRequest, err)
 		r.s.l.Error("failed to create oauth service", err)
@@ -53,21 +50,18 @@ func (r *router) Login(ctx *gin.Context) {
 		e(ctx, http.StatusUnauthorized, errors.New("http://youtu.be/otCpCn0l4Wo?t=15"))
 		r.s.l.Error("user's domain originates outside tendermint")
 		return
-	} else {
-
-		authTokenString, refreshTokenString, err := r.s.a.SignJWTs(userInfo, ctx.Request.PostFormValue("code"))
-
-		if err != nil {
-			e(ctx, http.StatusBadRequest, err)
-			r.s.l.Error("cannot generate jwts", err)
-			return
-		}
-
-		ctx.JSON(http.StatusOK, loginResponse{
-			fmt.Sprintf("Bearer %s", authTokenString),
-			refreshTokenString,
-			userInfo,
-		})
 	}
 
+	authTokenString, refreshTokenString, err := r.s.a.SignJWTs(userInfo, ctx.Request.PostFormValue("code"))
+	if err != nil {
+		e(ctx, http.StatusBadRequest, err)
+		r.s.l.Error("cannot generate jwts", err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, loginResponse{
+		fmt.Sprintf("Bearer %s", authTokenString),
+		refreshTokenString,
+		userInfo,
+	})
 }

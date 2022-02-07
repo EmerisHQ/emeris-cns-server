@@ -1,8 +1,10 @@
 package rest
 
 import (
+	"errors"
 	"net/http"
 
+	"github.com/allinbits/emeris-cns-server/cns/auth"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,13 +14,16 @@ type userInfoResponse struct {
 }
 
 func (r *router) User(ctx *gin.Context) {
-
-	name, _ := ctx.Get("name")
-	email, _ := ctx.Get("email")
+	user, exists := ctx.Get("user")
+	if !exists {
+		e(ctx, http.StatusBadRequest, errors.New("no user"))
+		r.s.l.Error("no user")
+		return
+	}
 
 	ctx.JSON(http.StatusOK, userInfoResponse{
-		name.(string),
-		email.(string),
+		user.(auth.User).Name,
+		user.(auth.User).Email,
 	})
 
 }
