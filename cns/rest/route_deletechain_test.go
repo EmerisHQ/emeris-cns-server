@@ -22,28 +22,18 @@ func TestDeleteChain(t *testing.T) {
 		name             string
 		dataStruct       cns.Chain
 		chainName        string
-		jwtToken         string
 		expectedHttpCode int
 	}{
-		{
-			"Delete Chain - Unauthorized",
-			cns.Chain{},
-			"foo",
-			invalidToken,
-			401,
-		},
 		{
 			"Delete Chain - Unknown chain",
 			cns.Chain{},
 			"foo",
-			validJWTToken,
 			404,
 		},
 		{
 			"Delete Chain - Known chain",
 			chainWithPublicEndpoints,
 			"chain2",
-			validJWTToken,
 			200,
 		},
 	}
@@ -64,7 +54,6 @@ func TestDeleteChain(t *testing.T) {
 			// act
 			req, _ := http.NewRequest("DELETE", fmt.Sprintf("http://%s%s", testingCtx.server.Config.RESTAddress, rest.DeleteChainRoute), strings.NewReader(string(payload)))
 			req.Header.Add("Content-Type", "application/json")
-			req.Header.Add("Authorization", tt.jwtToken)
 
 			resp, err := http.DefaultClient.Do(req)
 

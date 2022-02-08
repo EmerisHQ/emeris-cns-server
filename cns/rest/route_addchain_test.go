@@ -26,35 +26,24 @@ func TestAddChain(t *testing.T) {
 	tests := []struct {
 		name             string
 		dataStruct       cns.Chain
-		jwtToken         string
 		expectedHttpCode int
 		success          bool
 	}{
 		{
 			"Add Chain - Invalid",
 			cns.Chain{},
-			validJWTToken,
 			400,
-			true,
-		},
-		{
-			"Add Chain - Unauthorized",
-			cns.Chain{},
-			invalidToken,
-			401,
 			true,
 		},
 		{
 			"Add Chain - Without PublicEndpoint",
 			chainWithoutPublicEndpoints,
-			validJWTToken,
 			201,
 			true,
 		},
 		{
 			"Add Chain - With PublicEndpoints",
 			chainWithPublicEndpoints,
-			validJWTToken,
 			201,
 			true,
 		},
@@ -75,7 +64,6 @@ func TestAddChain(t *testing.T) {
 			// act
 			req, _ := http.NewRequest("POST", fmt.Sprintf("http://%s%s", testingCtx.server.Config.RESTAddress, rest.AddChainRoute), strings.NewReader(string(payload)))
 			req.Header.Add("Content-Type", "application/json")
-			req.Header.Add("Authorization", tt.jwtToken)
 
 			resp, err := http.DefaultClient.Do(req)
 
