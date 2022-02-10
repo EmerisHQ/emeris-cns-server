@@ -37,7 +37,7 @@ spec:
               value: "{{ .Values.redisUrl }}"
             - name: DEMERIS-CNS_KUBERNETESNAMESPACE
               value: "{{ .Values.k8sNamespace }}"
-            - name: DEMERIS-CNS_REDIRECT_URL
+            - name: DEMERIS-CNS_REDIRECTURL
               value: "{{ .Values.redirectURL }}"
           resources:
 {{ toYaml .Values.resources | indent 12 }}
