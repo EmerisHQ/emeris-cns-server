@@ -35,7 +35,7 @@ require (
 	github.com/alicebob/miniredis/v2 v2.18.0
 	github.com/allinbits/demeris-backend-models v1.0.1
 	github.com/google/go-cmp v0.5.7
-	github.com/swaggo/swag v1.7.4
+	github.com/swaggo/swag v1.7.9
 	github.com/tendermint/tendermint v0.34.11
 )
 
@@ -89,9 +89,9 @@ require (
 	github.com/go-logfmt/logfmt v0.5.0 // indirect
 	github.com/go-logr/logr v0.4.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
-	github.com/go-openapi/jsonreference v0.19.5 // indirect
-	github.com/go-openapi/spec v0.20.3 // indirect
-	github.com/go-openapi/swag v0.19.14 // indirect
+	github.com/go-openapi/jsonreference v0.19.6 // indirect
+	github.com/go-openapi/spec v0.20.4 // indirect
+	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
@@ -192,7 +192,7 @@ require (
 	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba // indirect
-	golang.org/x/tools v0.1.5 // indirect
+	golang.org/x/tools v0.1.7 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
