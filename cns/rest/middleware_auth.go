@@ -10,6 +10,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type AuthHeader struct {
+	Token string `header:"Authorization"`
+}
+
+func getToken(ctx *gin.Context) (string, error) {
+	var token string
+
+	cookie, err := ctx.Request.Cookie("auth._token.google")
+	if err != nil {
+		a := AuthHeader{}
+		if err := ctx.ShouldBindHeader(&a); err != nil {
+			return "", errors.New("no auth token found")
+		}
+
+		token = a.Token
+	} else {
+		reqTokenEncoded := cookie.Value
+
+		token, err = url.PathUnescape(reqTokenEncoded)
+		if err != nil {
+			return "", errors.New("error unescaping token")
+		}
+	}
+
+	return token, nil
+}
+
 func (r *router) Auth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
@@ -21,19 +48,10 @@ func (r *router) Auth() gin.HandlerFunc {
 			})
 			ctx.Next()
 		} else {
-			cookie, err := ctx.Request.Cookie("auth._token.google")
+			reqToken, err := getToken(ctx)
 			if err != nil {
 				e(ctx, http.StatusUnauthorized, err)
-				r.s.l.Error("token not found")
-				return
-			}
-
-			reqTokenEncoded := cookie.Value
-
-			reqToken, err := url.PathUnescape(reqTokenEncoded)
-			if err != nil {
-				e(ctx, http.StatusUnauthorized, err)
-				r.s.l.Error("error unescaping token", err)
+				r.s.l.Error("token not found", err)
 				return
 			}
 
@@ -51,9 +69,9 @@ func (r *router) Auth() gin.HandlerFunc {
 				r.s.l.Error("failed to verify token", err)
 				return
 			}
+
 			email := claims["email"].(string)
 			name := claims["name"].(string)
-
 			ctx.Set("user", auth.User{
 				Name:  name,
 				Email: email,
