@@ -23,7 +23,7 @@ func main() {
 		Debug:   config.Debug,
 	})
 
-	logger.Infow("cns-server", "version", Version)
+	logger.Infow("cns-server", "version", Version, "redirectURL", config.RedirectURL)
 
 	di, err := database.New(config.DatabaseConnectionURL)
 	if err != nil {
