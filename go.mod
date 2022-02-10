@@ -10,7 +10,7 @@ replace (
 
 require (
 	github.com/allinbits/starport-operator v0.0.1-alpha.45
-	github.com/cockroachdb/cockroach-go/v2 v2.2.6
+	github.com/cockroachdb/cockroach-go/v2 v2.2.8
 	github.com/cosmos/cosmos-sdk v0.42.8
 	github.com/gin-contrib/zap v0.0.2
 	github.com/gin-gonic/gin v1.7.7
