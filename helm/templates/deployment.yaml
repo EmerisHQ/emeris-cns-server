@@ -39,6 +39,10 @@ spec:
               value: "{{ .Values.k8sNamespace }}"
             - name: DEMERIS-CNS_REDIRECTURL
               value: "{{ .Values.redirectURL }}"
+            {{- if .Values.test }}
+            - name: DEMERIS-CNS_ENV
+              value: "test"
+            {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       terminationGracePeriodSeconds: 10
