@@ -27,4 +27,4 @@ k8sNamespace: emeris
 redirectURL: https://admin.emeris.com/login
 
 # 'test' disables OAuth. Do not change outside of controlled envs!
-environment: live
+test: false
