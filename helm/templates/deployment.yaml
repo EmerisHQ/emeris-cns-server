@@ -41,7 +41,7 @@ spec:
               value: "{{ .Values.redirectURL }}"
             {{- if .Values.test }}
             - name: DEMERIS-CNS_ENV
-              value: "test"
+              value: "{{ .Values.environment }}"
             {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
