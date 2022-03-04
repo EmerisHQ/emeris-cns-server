@@ -24,7 +24,10 @@ func getToken(ctx *gin.Context) (string, error) {
 			return "", errors.New("no auth token found")
 		}
 
-		token = a.Token
+		token, err = url.PathUnescape(a.Token)
+		if err != nil {
+			return "", errors.New("error unescaping token")
+		}
 	} else {
 		reqTokenEncoded := cookie.Value
 
