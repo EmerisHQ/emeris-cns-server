@@ -35,7 +35,7 @@ require (
 	github.com/alicebob/miniredis/v2 v2.18.0
 	github.com/allinbits/demeris-backend-models v1.0.1
 	github.com/google/go-cmp v0.5.7
-	github.com/swaggo/swag v1.7.9
+	github.com/swaggo/swag v1.8.0
 	github.com/tendermint/tendermint v0.34.11
 )
 
