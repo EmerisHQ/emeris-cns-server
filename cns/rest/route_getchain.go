@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	models "github.com/allinbits/demeris-backend-models/cns"
+	models "github.com/emerishq/demeris-backend-models/cns"
 
 	"github.com/gin-gonic/gin"
 )

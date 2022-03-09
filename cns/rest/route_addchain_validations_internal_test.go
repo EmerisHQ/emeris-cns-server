@@ -3,7 +3,7 @@ package rest
 import (
 	"testing"
 
-	"github.com/allinbits/demeris-backend-models/cns"
+	"github.com/emerishq/demeris-backend-models/cns"
 	"github.com/stretchr/testify/require"
 )
 

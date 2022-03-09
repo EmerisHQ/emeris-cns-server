@@ -1,6 +1,6 @@
 package database
 
-import "github.com/allinbits/emeris-utils/database"
+import "github.com/emerishq/emeris-utils/database"
 
 const createDatabase = `
 CREATE DATABASE IF NOT EXISTS cns;

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/allinbits/emeris-cns-server/cns/auth"
-	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
-	"github.com/allinbits/emeris-cns-server/cns/config"
-	"github.com/allinbits/emeris-cns-server/cns/database"
-	"github.com/allinbits/emeris-cns-server/cns/rest"
-	"github.com/allinbits/emeris-utils/k8s"
-	"github.com/allinbits/emeris-utils/logging"
+	"github.com/emerishq/emeris-cns-server/cns/auth"
+	"github.com/emerishq/emeris-cns-server/cns/chainwatch"
+	"github.com/emerishq/emeris-cns-server/cns/config"
+	"github.com/emerishq/emeris-cns-server/cns/database"
+	"github.com/emerishq/emeris-cns-server/cns/rest"
+	"github.com/emerishq/emeris-utils/k8s"
+	"github.com/emerishq/emeris-utils/logging"
 )
 
 var Version = "not specified"

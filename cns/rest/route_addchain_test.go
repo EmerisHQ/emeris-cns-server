@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/allinbits/emeris-cns-server/cns/rest"
+	"github.com/emerishq/emeris-cns-server/cns/rest"
 
-	"github.com/allinbits/demeris-backend-models/cns"
-	"github.com/allinbits/emeris-cns-server/mocks"
+	"github.com/emerishq/demeris-backend-models/cns"
+	"github.com/emerishq/emeris-cns-server/mocks"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"sigs.k8s.io/controller-runtime/pkg/client"

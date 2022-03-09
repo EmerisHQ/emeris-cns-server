@@ -1,4 +1,4 @@
-module github.com/allinbits/emeris-cns-server
+module github.com/emerishq/emeris-cns-server
 
 go 1.17
 
@@ -16,8 +16,8 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/go-redis/redis/v8 v8.11.4
-	github.com/iamolegga/enviper v1.2.1 // indirect
-	github.com/jackc/pgx/v4 v4.10.1 // indirect
+	github.com/iamolegga/enviper v1.4.0 // indirect
+	github.com/jackc/pgx/v4 v4.15.0 // indirect
 	github.com/jmoiron/sqlx v1.3.3 // indirect
 	github.com/lib/pq v1.10.4
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
@@ -33,13 +33,13 @@ require (
 
 require (
 	github.com/alicebob/miniredis/v2 v2.18.0
-	github.com/allinbits/demeris-backend-models v1.0.1
+	github.com/emerishq/demeris-backend-models v1.2.0
 	github.com/google/go-cmp v0.5.7
 	github.com/swaggo/swag v1.8.0
 	github.com/tendermint/tendermint v0.34.11
 )
 
-require github.com/allinbits/emeris-utils v0.1.0
+require github.com/emerishq/emeris-utils v1.3.0
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
@@ -96,6 +96,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/gofrs/flock v0.8.1 // indirect
+	github.com/gofrs/uuid v4.2.0+incompatible // indirect
 	github.com/gogo/gateway v1.1.0 // indirect
 	github.com/gogo/protobuf v1.3.3 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
@@ -123,12 +124,12 @@ require (
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
-	github.com/jackc/pgconn v1.8.0 // indirect
+	github.com/jackc/pgconn v1.11.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgproto3/v2 v2.0.6 // indirect
+	github.com/jackc/pgproto3/v2 v2.2.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
-	github.com/jackc/pgtype v1.6.2 // indirect
+	github.com/jackc/pgtype v1.10.0 // indirect
 	github.com/jmhodges/levigo v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -193,7 +194,6 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba // indirect
 	golang.org/x/tools v0.1.7 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.2.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220218161850-94dd64e39d7c // indirect

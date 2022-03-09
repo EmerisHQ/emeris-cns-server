@@ -7,11 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 	v12 "k8s.io/api/core/v1"
 
-	models "github.com/allinbits/demeris-backend-models/cns"
-	"github.com/allinbits/demeris-backend-models/validation"
-	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
-	"github.com/allinbits/emeris-utils/k8s/operator"
 	v1 "github.com/allinbits/starport-operator/api/v1"
+	models "github.com/emerishq/demeris-backend-models/cns"
+	"github.com/emerishq/demeris-backend-models/validation"
+	"github.com/emerishq/emeris-cns-server/cns/chainwatch"
+	"github.com/emerishq/emeris-utils/k8s/operator"
 )
 
 const AddChainRoute = "/add"

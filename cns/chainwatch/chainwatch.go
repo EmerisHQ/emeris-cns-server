@@ -7,10 +7,10 @@ import (
 	"go.uber.org/zap"
 	kube "sigs.k8s.io/controller-runtime/pkg/client"
 
-	models "github.com/allinbits/demeris-backend-models/cns"
-	"github.com/allinbits/emeris-cns-server/cns/database"
-	"github.com/allinbits/emeris-utils/k8s"
 	v1 "github.com/allinbits/starport-operator/api/v1"
+	models "github.com/emerishq/demeris-backend-models/cns"
+	"github.com/emerishq/emeris-cns-server/cns/database"
+	"github.com/emerishq/emeris-utils/k8s"
 )
 
 type Instance struct {
