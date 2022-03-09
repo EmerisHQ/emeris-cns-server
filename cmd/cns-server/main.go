@@ -30,7 +30,12 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	kube, err := k8s.NewInCluster()
+	k8sConfig, err := k8s.InClusterConfig()
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	kube, err := k8s.NewClient(k8sConfig)
 	if err != nil {
 		logger.Fatal(err)
 	}
