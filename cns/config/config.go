@@ -3,8 +3,8 @@ package config
 import (
 	"fmt"
 
-	"github.com/allinbits/demeris-backend-models/validation"
-	"github.com/allinbits/emeris-utils/configuration"
+	"github.com/emerishq/demeris-backend-models/validation"
+	"github.com/emerishq/emeris-utils/configuration"
 
 	"github.com/go-playground/validator/v10"
 )

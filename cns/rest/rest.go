@@ -4,18 +4,18 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/allinbits/emeris-cns-server/cns/auth"
-	"github.com/allinbits/emeris-cns-server/cns/config"
+	"github.com/emerishq/emeris-cns-server/cns/auth"
+	"github.com/emerishq/emeris-cns-server/cns/config"
 
-	"github.com/allinbits/demeris-backend-models/validation"
+	"github.com/emerishq/demeris-backend-models/validation"
 	"github.com/gin-gonic/gin/binding"
 
-	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
+	"github.com/emerishq/emeris-cns-server/cns/chainwatch"
 
 	kube "sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/allinbits/emeris-cns-server/cns/database"
-	"github.com/allinbits/emeris-utils/logging"
+	"github.com/emerishq/emeris-cns-server/cns/database"
+	"github.com/emerishq/emeris-utils/logging"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

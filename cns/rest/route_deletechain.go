@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/allinbits/demeris-backend-models/validation"
+	"github.com/emerishq/demeris-backend-models/validation"
 
 	"github.com/gin-gonic/gin"
 )

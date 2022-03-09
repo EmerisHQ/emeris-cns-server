@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/allinbits/demeris-backend-models/cns"
+	"github.com/emerishq/demeris-backend-models/cns"
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/allinbits/emeris-cns-server/cns/rest"
+	"github.com/emerishq/emeris-cns-server/cns/rest"
 
 	"github.com/stretchr/testify/require"
 )

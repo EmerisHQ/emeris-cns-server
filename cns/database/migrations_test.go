@@ -6,10 +6,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/allinbits/demeris-backend-models/cns"
-	dbutils "github.com/allinbits/emeris-utils/database"
-	"github.com/allinbits/emeris-utils/logging"
 	"github.com/cockroachdb/cockroach-go/v2/testserver"
+	"github.com/emerishq/demeris-backend-models/cns"
+	dbutils "github.com/emerishq/emeris-utils/database"
+	"github.com/emerishq/emeris-utils/logging"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 )

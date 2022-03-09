@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 
-	models "github.com/allinbits/demeris-backend-models/cns"
 	v1 "github.com/allinbits/starport-operator/api/v1"
+	models "github.com/emerishq/demeris-backend-models/cns"
 )
 
 func TestInstance_updatePrimaryChannelForChain(t *testing.T) {

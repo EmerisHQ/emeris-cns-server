@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/allinbits/emeris-cns-server/cns/auth"
+	"github.com/emerishq/emeris-cns-server/cns/auth"
 	"github.com/gin-gonic/gin"
 )
 

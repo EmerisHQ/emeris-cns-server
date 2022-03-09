@@ -9,16 +9,16 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/allinbits/emeris-cns-server/cns/auth"
-	"github.com/allinbits/emeris-cns-server/cns/rest"
+	"github.com/emerishq/emeris-cns-server/cns/auth"
+	"github.com/emerishq/emeris-cns-server/cns/rest"
 
 	"github.com/alicebob/miniredis/v2"
-	"github.com/allinbits/emeris-cns-server/cns/chainwatch"
-	"github.com/allinbits/emeris-cns-server/cns/config"
-	"github.com/allinbits/emeris-cns-server/cns/database"
-	"github.com/allinbits/emeris-cns-server/mocks"
-	"github.com/allinbits/emeris-utils/logging"
 	"github.com/cockroachdb/cockroach-go/v2/testserver"
+	"github.com/emerishq/emeris-cns-server/cns/chainwatch"
+	"github.com/emerishq/emeris-cns-server/cns/config"
+	"github.com/emerishq/emeris-cns-server/cns/database"
+	"github.com/emerishq/emeris-cns-server/mocks"
+	"github.com/emerishq/emeris-utils/logging"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
