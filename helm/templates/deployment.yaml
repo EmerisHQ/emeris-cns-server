@@ -21,7 +21,7 @@ spec:
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
       containers:
-        - name: api-server
+        - name: cns-server
           image: {{ .Values.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
